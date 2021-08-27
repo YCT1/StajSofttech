@@ -4,36 +4,36 @@
     Layout = "~/Views/_LayoutPageMain.cshtml";
 }
 @if (User.Identity.IsAuthenticated)
-{   <div class="col-sm">
+{<div class="col-sm">
     <h1>Mun Voting App</h1>
     <p>by Yekta Can Tursun</p>
 
     <br />
     <button onclick="myFunction()" class="btn btn-success" id="sessionCreationButton">Click to Add New Session</button>
     <br /><br />
-          <div class="col-sm-4">
-              <div class="card" id="myDIV" style="display:none">
-                  <div class="card-header">
-                      Session Details:
-                  </div>
-                  <div class="card-body">
-                      @using (Html.BeginForm())
-                      {
-                          <div class="form-group">
-                              <label> Conference Name</label>
-                              @Html.TextBox("ConferenceName", null, new { @class = "form-control" })
-                          </div>
+    <div class="col-sm-4">
+        <div class="card" id="myDIV" style="display:none">
+            <div class="card-header">
+                Session Details:
+            </div>
+            <div class="card-body">
+                @using (Html.BeginForm())
+                {
+                    <div class="form-group">
+                        <label> Conference Name</label>
+                        @Html.TextBox("ConferenceName", null, new { @class = "form-control" })
+                    </div>
 
-                          <div class="form-group">
-                              <label> Committee Name</label>
-                              @Html.TextBox("CommiteeName", null, new { @class = "form-control" })
-                          </div>
-                          <br />
-                          <button tpye="submit" class="btn btn-success">Submit</button>
-                      }
-                  </div>
-              </div>
-          </div>
+                    <div class="form-group">
+                        <label> Committee Name</label>
+                        @Html.TextBox("CommiteeName", null, new { @class = "form-control" })
+                    </div>
+                    <br />
+                    <button tpye="submit" class="btn btn-success">Submit</button>
+                }
+            </div>
+        </div>
+    </div>
     <br />
     <br />
     @if (ViewBag.sessionNumber == 0)
@@ -53,10 +53,47 @@
                     <p class="card-text">@item.CommitteeName</p>
                     <a href="/@item.Id" class="btn btn-primary">Get to Session</a>
                     <a href="@Url.Action("Delete", "Session", new { sessionId = item.Id })" class="btn btn-danger">Delete</a>
+                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#test_@item.Id">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
+                            <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z" />
+                        </svg>
+                        Edit
+                    </button>
                 </div>
 
             </div>
-            <br/>
+            <br />
+            <div class="modal fade" id="test_@item.Id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Edit Session</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        @using (Html.BeginForm("Edit", "Session", new { sessionId = item.Id }, FormMethod.Post))
+                        {
+                            <div class="modal-body">
+
+                                <div class="form-group">
+                                    <label> Conference Name</label>
+                                    @Html.TextBox("ConferenceName", item.ConferenceName, new { @class = "form-control" })
+                                </div>
+
+                                <div class="form-group">
+                                    <label> Committee Name</label>
+                                    @Html.TextBox("CommiteeName", item.CommitteeName, new { @class = "form-control" })
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
         }
 
     }
@@ -70,7 +107,8 @@
                 button.className = "btn btn-danger";
                 button.innerHTML = "Cancel";
                 x.style.display = "block";
-                
+
+
             } else {
                 button.className = "btn btn-success";
                 button.innerHTML = "Click to Add New Session";
@@ -78,4 +116,5 @@
             }
         }
     </script>
-}
+
+        }

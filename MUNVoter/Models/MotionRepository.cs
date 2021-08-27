@@ -35,6 +35,11 @@ namespace MUNVoter.Models
             Remove(sessionMotions[0]);
         }
 
+        public void DeleteAllBySessionId(int SessionId)
+        {
+            List<Motion> sessionMotions = GetMotionsBySessionId(SessionId).ToList();
+            RemoveRange(sessionMotions);
+        }
         public List<Motion> Sort(List<Motion> unordered)
         {
             for (int i = 0; i < unordered.Count() - 1; i++)

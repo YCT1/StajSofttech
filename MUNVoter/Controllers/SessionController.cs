@@ -64,8 +64,18 @@ namespace MUNVoter.Controllers
         {
             var db = new UnitOfWork(new DatabaseContext());
             db.Sessions.Remove(db.Sessions.findSessionById(sessionId));
+            db.Motions.DeleteAllBySessionId(sessionId);
             db.Complete();
             var sessionList = db.Sessions.getUserSession(User.Identity.GetUserId());
+            return Redirect("Index");
+        }
+        
+        [HttpPost]
+        public ActionResult Edit(int sessionId, string CommiteeName, string ConferenceName)
+        {
+            var db = new UnitOfWork(new DatabaseContext());
+            db.Sessions.editSession(sessionId, CommiteeName, ConferenceName);
+            db.Complete();
             return Redirect("Index");
         }
     }

@@ -50,5 +50,11 @@ namespace MUNVoter.Models
         {
             return DatabaseContext.Sessions.Where(i => i.Id == Id).FirstOrDefault();
         }
+
+        public void editSession(int Id, string CommitteeName, string ConferenceName)
+        {
+            DatabaseContext.Sessions.Where(i => i.Id == Id).ToList().ForEach(i=>i.ConferenceName=ConferenceName);
+            DatabaseContext.Sessions.Where(i => i.Id == Id).ToList().ForEach(i => i.CommitteeName = CommitteeName);
+        }
     }
 }

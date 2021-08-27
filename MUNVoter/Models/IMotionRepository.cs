@@ -14,5 +14,6 @@ namespace MUNVoter.Models
         List<Motion> Sort(List<Motion> unordered);
 
         void DeleteFirst(int SessionId);
+        void DeleteAllBySessionId(int SessionId);
     }
 }

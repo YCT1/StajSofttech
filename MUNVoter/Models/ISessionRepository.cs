@@ -15,5 +15,7 @@ namespace MUNVoter.Models
         bool isUserHaveRightToAccess(int Id,string UserId);
 
         Session findSessionById(int Id);
+
+        void editSession(int Id, string CommitteeName, string ConferenceName);
     }
 }
