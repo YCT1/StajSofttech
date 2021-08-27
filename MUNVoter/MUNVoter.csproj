@@ -158,11 +158,13 @@
     <Compile Include="Models\DatabaseContext.cs" />
     <Compile Include="Models\IMotionRepository.cs" />
     <Compile Include="Models\IRepository.cs" />
+    <Compile Include="Models\ISessionRepository.cs" />
     <Compile Include="Models\IUnitOfWork.cs" />
     <Compile Include="Models\Motion.cs" />
     <Compile Include="Models\MotionRepository.cs" />
     <Compile Include="Models\Repository.cs" />
     <Compile Include="Models\Session.cs" />
+    <Compile Include="Models\SessionRepository.cs" />
     <Compile Include="Models\UnitOfWork.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserModel.cs" />

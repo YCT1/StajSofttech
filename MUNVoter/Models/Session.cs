@@ -14,8 +14,12 @@ namespace MUNVoter.Models
         [Required]
         [MaxLength(10)]
         public string SessionCode { get; set; }
-        
+
+        [Required]
+        public string ConferenceName { get; set; }
+        [Required]
+        public string CommitteeName { get; set; }
         public string Password { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
     }
 }

@@ -9,6 +9,7 @@ namespace MUNVoter.Models
     public interface IUnitOfWork
     {
         IMotionRepository Motions { get; }
+        ISessionRepository Sessions { get; }
         int Complete();
     }
 }

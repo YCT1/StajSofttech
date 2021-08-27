@@ -1,10 +1,81 @@
-﻿
+﻿@model IEnumerable<MUNVoter.Models.Session>
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/_LayoutPageMain.cshtml";
 }
+@if (User.Identity.IsAuthenticated)
+{   <div class="col-sm">
+    <h1>Mun Voting App</h1>
+    <p>by Yekta Can Tursun</p>
 
-<div class="panel panel-info">
-    <div class="panel-heading">Sessions</div>
-    <div class="panel-body">Panel Content</div>
+    <br />
+    <button onclick="myFunction()" class="btn btn-success" id="sessionCreationButton">Click to Add New Session</button>
+    <br /><br />
+          <div class="col-sm-4">
+              <div class="card" id="myDIV" style="display:none">
+                  <div class="card-header">
+                      Session Details:
+                  </div>
+                  <div class="card-body">
+                      @using (Html.BeginForm())
+                      {
+                          <div class="form-group">
+                              <label> Conference Name</label>
+                              @Html.TextBox("ConferenceName", null, new { @class = "form-control" })
+                          </div>
+
+                          <div class="form-group">
+                              <label> Committee Name</label>
+                              @Html.TextBox("CommiteeName", null, new { @class = "form-control" })
+                          </div>
+                          <br />
+                          <button tpye="submit" class="btn btn-success">Submit</button>
+                      }
+                  </div>
+              </div>
+          </div>
+    <br />
+    <br />
+    @if (ViewBag.sessionNumber == 0)
+    {
+        <h4>There is no session exsist</h4>
+    }
+    else
+    {
+        foreach (var item in Model)
+        {
+            <div class="card">
+                <div class="card-header">
+                    Session
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">@item.ConferenceName</h5>
+                    <p class="card-text">@item.CommitteeName</p>
+                    <a href="/@item.Id" class="btn btn-primary">Get to Session</a>
+                    <a href="@Url.Action("Delete", "Session", new { sessionId = item.Id })" class="btn btn-danger">Delete</a>
+                </div>
+
+            </div>
+            <br/>
+        }
+
+    }
+
 </div>
+    <script>
+        function myFunction() {
+            var x = document.getElementById("myDIV");
+            var button = document.getElementById("sessionCreationButton");
+            if (x.style.display === "none") {
+                button.className = "btn btn-danger";
+                button.innerHTML = "Cancel";
+                x.style.display = "block";
+                
+            } else {
+                button.className = "btn btn-success";
+                button.innerHTML = "Click to Add New Session";
+                x.style.display = "none";
+            }
+        }
+    </script>
+}

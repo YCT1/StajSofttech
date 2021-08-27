@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MUNVoter.Models;
+using Microsoft.AspNet.Identity;
 namespace MUNVoter.Controllers
 {
     //[Authorize]
@@ -20,7 +21,8 @@ namespace MUNVoter.Controllers
             if (string.IsNullOrWhiteSpace(sessionIDParameter) || sessionIDParameter=="Index")
             {
                 //return Content("<h1>This is a Register Page</h1><h2>It is under construction</h2>");
-                return View();
+                
+                return Redirect("session/index");
             }
             int sessionID = int.Parse(sessionIDParameter);
             // Old one
@@ -47,9 +49,18 @@ namespace MUNVoter.Controllers
             //db.Motions.AddRange(_list);db.Complete();
 
 
+            if (!db.Sessions.isSessionExsist(sessionID) || !db.Sessions.isUserHaveRightToAccess(sessionID,User.Identity.GetUserId()))
+            {
+                return Content("<h2>Error: Session do not exsist or you have not access to it </h2>");
+            }
 
+            //Viewbag Operations
             ViewBag.motionNumber = db.Motions.GetMotionNumberBySessionId(sessionID);
             ViewBag.sessionID = sessionID;
+           
+            
+            ViewBag.ConferenceName = db.Sessions.findSessionById(sessionID).ConferenceName;
+            ViewBag.ComitteeName = db.Sessions.findSessionById(sessionID).CommitteeName;
             return View(db.Motions.GetMotionsBySessionId(sessionID).ToList());
         }
 
@@ -65,8 +76,12 @@ namespace MUNVoter.Controllers
             db.Motions.Add(newMotion);
 
             db.Complete();
+
             ViewBag.motionNumber = db.Motions.GetMotionNumberBySessionId(sessionID);
             ViewBag.SessionID = sessionID;
+
+            ViewBag.ConferenceName = db.Sessions.findSessionById(sessionID).ConferenceName;
+            ViewBag.ComitteeName = db.Sessions.findSessionById(sessionID).CommitteeName;
             return View(db.Motions.GetMotionsBySessionId(sessionID).ToList());
             
         }
@@ -80,8 +95,11 @@ namespace MUNVoter.Controllers
             var db = new UnitOfWork(new DatabaseContext());
             db.Motions.DeleteFirst(sessionID);
             db.Complete();
+
             ViewBag.motionNumber = db.Motions.GetMotionNumberBySessionId(sessionID);
             ViewBag.SessionID = sessionID;
+            ViewBag.ConferenceName = db.Sessions.findSessionById(sessionID).ConferenceName;
+            ViewBag.ComitteeName = db.Sessions.findSessionById(sessionID).CommitteeName;
             return View("Index", db.Motions.GetMotionsBySessionId(sessionID).ToList());
         }
         [Route("Home/Clear/{sessionIDParameter?}")]
@@ -93,8 +111,11 @@ namespace MUNVoter.Controllers
             var db = new UnitOfWork(new DatabaseContext());
             db.Motions.RemoveRange(db.Motions.GetMotionsBySessionId(sessionID));
             db.Complete();
+
             ViewBag.motionNumber = db.Motions.GetMotionNumberBySessionId(sessionID);
             ViewBag.SessionID = sessionID;
+            ViewBag.ConferenceName = db.Sessions.findSessionById(sessionID).ConferenceName;
+            ViewBag.ComitteeName = db.Sessions.findSessionById(sessionID).CommitteeName;
             return View("Index",db.Motions.GetMotionsBySessionId(sessionID).ToList());
         }
     }
