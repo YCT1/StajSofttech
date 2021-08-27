@@ -1,0 +1,176 @@
+﻿@model List<MUNVoter.Models.Motion>
+@{
+    Layout = "~/Views/_LayoutPageMain.cshtml";
+}
+
+
+@if (User.Identity.IsAuthenticated)
+{
+    
+
+<div class="col-sm">
+    <h1>Mun Voting App</h1>
+    <p>by Yekta Can Tursun</p>
+
+
+
+
+    @using (Html.BeginForm("", "Home", new { sessionIDParameter = ViewBag.SessionID }, FormMethod.Post))
+    {
+        <div class="form-group">
+            <label for="Operation">Motion Type</label>
+            <select class="form-control" size="3" name="type">
+                <option value="Moderated" selected>Moderated Caucus</option>
+                <option value="Unmoderated">Unmoderated Caucus</option>
+                <option value="Extention">Extention</option>
+            </select>
+
+        </div>
+        <div class="form-group">
+            <label for="Number Two">Motion Title</label>
+            @Html.TextBox("title", null, new { @class = "form-control", @placeholder = "The title of the motion" })
+        </div>
+
+        <div class="form-group">
+            <label for="Number Two">Country</label>
+            @Html.TextBox("country", null, new { @class = "form-control", @placeholder = "eg Turkey, USA" })
+        </div>
+        <div class="form-group">
+            <label for="Number Two">Total Time</label>
+            @Html.TextBox("totalTime", null, new { @class = "form-control", @placeholder = "in minutes", @type = "number", @step = "0.01", @min = 0, @max = 20 })
+        </div>
+
+        <div class="form-group">
+            <label for="Number Two">Individual Time</label>
+            @Html.TextBox("indTime", null, new { @class = "form-control", @placeholder = "in seconds", @type = "number", @step = "0.01" })
+        </div>
+        <br>
+        <input type="submit" name="submit_button" value="Add" id="add_btn" class="btn btn-primary btn-lg" disabled />
+        <a href="@Url.Action("Clear", "Home", new { sessionIDParameter = ViewBag.SessionID })" type="submit" name="submit_button" id="clr_btn" class="btn btn-danger">Clear</a>
+        <br>
+    }
+</div>
+
+<div class="col-sm-7" align="center">
+    @if (ViewBag.motionNumber > 0)
+    {
+        <h4>Number of Proposed Motion: @ViewBag.motionNumber</h4>
+        <h2>Motions</h2>
+
+        for (int i = 0; i < ViewBag.motionNumber; i++)
+        {
+            {
+                string test = "";
+                if (i == 0)
+                {
+                    test = "card border-success mb-2 w-75";
+                }
+                else
+                {
+                    test = "card w-75";
+                }
+
+
+                <div class="@test">
+                    @if (i == 0)
+                    {
+                        <h5 class="card-header" style="color: green;">Voting</h5>
+                        <a href="@Url.Action("Delete", "Home", new { sessionIDParameter = ViewBag.SessionID })" input name="submit_button" id="voted_btn" class="btn btn-success">Voted</a>
+
+                    }
+                    <div class="card-body">
+                        <h5 class="card-title">@Model[i].type</h5>
+                        <p class="card-text">@Model[i].title</p>
+                        <p class="card-text"><i>by @Model[i].sponsorCountry </i></p>
+                        <hr>
+                        @if (Model[i].type == "Extention" || Model[i].type == "Unmoderated")
+                        {
+                            <p class="card-text">Total Time: <b>@Model[i].totalTime min</b></p>
+                        }
+                        else
+                        {
+                            <p class="card-text">Total Time: <b>@Model[i].totalTime min</b>,  Individual Time: <b>@Model[i].indTime seconds</b></p>
+                        }
+                    </div>
+                </div>
+                <br>
+            }
+
+
+        }
+
+    }
+    else
+    {
+
+        <h2>There is no motion in the list</h2>
+
+    }
+
+</div>
+
+<script>
+    $('input[name="country"]').keyup(function () {
+        if ($('input[name="country"]').val() != '' && $('input[name="title"]').val() != '' && $('input[name="totalTime"]').val() != '') {
+            $('input[id="add_btn"]').removeAttr('disabled');
+        } else {
+            $('input[id="add_btn"]').prop('disabled', true);
+        }
+    });
+
+    $('input[name="title"]').keyup(function () {
+        if ($('input[name="title"]').val() != '' && $('input[name="country"]').val() && $('input[name="totalTime"]').val() != '') {
+            $('input[id="add_btn"]').removeAttr('disabled');
+        } else {
+            $('input[id="add_btn"]').prop('disabled', true);
+        }
+    });
+
+    $('input[name="totalTime"]').keyup(function () {
+        if ($('input[name="title"]').val() != '' && $('input[name="country"]').val() && $('input[name="totalTime"]').val() != '') {
+            $('input[id="add_btn"]').removeAttr('disabled');
+        } else {
+            $('input[id="add_btn"]').prop('disabled', true);
+        }
+    });
+
+    $('select[name="type"]').click(function () {
+        if ($(this).val() == 'Moderated') {
+            $('input[ name="indTime"]').removeAttr('disabled');
+            $('input[ name="indTime"]').attr("placeholder", "in Seconds");
+        } else if ($(this).val() == 'Unmoderated') {
+            $('input[ name="indTime"]').prop('disabled', true);
+            $('input[ name="indTime"]').attr("placeholder", "Unmoderated Motions do not have an individual time");
+            $('input[ name="indTime"]').val('');
+        } else if ($(this).val() == 'Extention') {
+            $('input[ name="indTime"]').removeAttr('disabled');
+            $('input[ name="indTime"]').attr("placeholder", "in Seconds");
+        }
+    });
+
+    $('input[name="indTime"]').blur(function () {
+        if ($(this).val() <= 2 && $(this).val() > 0) {
+            var value = $('input[ name="indTime"]').val();
+            value = Math.floor(value) * 60;
+            $('input[ name="indTime"]').val(value);
+        }
+
+    });
+</script>
+}
+else { 
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4">
+        <h1>Mun Voting App</h1>
+        <p>by Yekta Can Tursun</p>
+
+        <h2>Welcome!</h2>
+        <hr />
+        <div class="d-grid gap-2 col-6 mx-auto">
+            <a href="/Account/Login" class="btn btn-success btn-lg">Login</a>
+            
+            <a href="/Account/Register" class="btn btn-primary btn-lg">Register</a>
+        </div>
+    </div>
+
+}

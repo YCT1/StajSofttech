@@ -1,0 +1,37 @@
+﻿@model IEnumerable<MUNVoter.Identity.ApplicationUser>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/_LayoutPageMain.cshtml";
+}
+
+<div class="panel panel-primary">
+    <h2>Users</h2>
+    <table class="table table-striped">
+        <tr>
+            <th>Id</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Password</th>
+        </tr>
+        @if (Model.Count() == 0)
+        {
+            <tr>
+                <td colspan="4" class="text-center">
+                    No user exsist
+                </td>
+            </tr>
+        }
+        else
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.UserName</td>
+                    <td>@item.Email</td>
+                    <td>@item.PasswordHash</td>
+                </tr>
+            }
+        }
+    </table>
+</div>

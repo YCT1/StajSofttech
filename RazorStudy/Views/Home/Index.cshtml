@@ -1,0 +1,73 @@
+﻿@model RazorStudy.Models.UrunKategoriModel
+
+@{
+    ViewBag.Title = "Index";
+
+    // Hatalı
+    // string[] kurslar = { "eleman1", "eleman2", "eleman3" };
+
+}
+@section Kategori{
+    @Html.Action("KategoriMenu", "Kategori")
+}
+
+<div class="row">
+
+
+
+
+    <div class="card-deck">
+        <div class="alert alert-success" role="alert">
+            <b> @Model.UrunSayisi</b> number of product has been in stock.
+        </div>
+        @{int i = 0;
+            foreach (var item in Model.Urunler)
+            {
+
+                string test = "";
+                if (i == 0)
+                {
+                    test = "card border-success mb-3";
+                }
+                else
+                {
+                    test = "card";
+                }
+                i++;
+                <div class="@test">
+                    <div class="card-header">
+                        @if (item.SatistaMi)
+                        {
+                            <p class="card-text">In the Stock</p>
+                        }
+                        else
+                        {
+                            <p class="card-text">Not in the Stock</p>
+                        }
+
+                    </div>
+                    <img src="https://via.placeholder.com/750x150" class="card-img-top" />
+                    <div class="card-body">
+
+                        <h5 class="card-title">@item.UrunAdi</h5>
+                        <p>@item.Fiyat €</p>
+                        <p class="card-text">@item.Aciklama</p>
+                        @if (item.SatistaMi)
+                        {
+                            <a href="/Home/Details/?id=@item.UrunID" type="button" class="btn btn-primary">Buy Now!</a>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-primary" disabled>Unavaliable</button>
+                        }
+
+                    </div>
+                </div>
+                <br />
+            }
+        }
+    </div>
+
+
+
+</div>

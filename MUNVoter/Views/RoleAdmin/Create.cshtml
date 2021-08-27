@@ -1,0 +1,23 @@
+﻿@model string
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/_LayoutPageMain.cshtml";
+}
+<div class="col-sm-4"></div>
+<div class="col-sm-4">
+    <h1>Mun Voting App</h1>
+    <p>by Yekta Can Tursun</p>
+
+    <h2>Create Role</h2>
+
+    @Html.ValidationSummary()
+    @using (Html.BeginForm())
+    {
+        <div class="forn-group">
+            <label>Name</label>
+            <input name="name" value="@Model" class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-primary">Create</button>
+    }
+
+</div>

@@ -1,0 +1,52 @@
+﻿
+@{
+    ViewBag.Title = "UrunEkle";
+}
+
+<h2>Product Adding Page</h2>
+
+<hr \ />
+
+@using (Html.BeginForm("UrunEkle","Home",FormMethod.Post))
+{
+<div class="form-horizontal">
+    <div class="form-group">
+        <label for="exampleInputEmail1" class="control-label col-md-3">Product Name</label>
+        <div class="col-md-9">
+            @Html.TextBox("UrunAdi", null, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="exampleInputEmail1" class="control-label col-md-3">Product Details</label>
+        <div class="col-md-9">
+            @Html.TextArea("Aciklama", null, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="exampleInputEmail1" class="control-label col-md-3">Price</label>
+        <div class="col-md-9">
+            @Html.TextBox("Fiyat", null, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="exampleInputEmail1" class="control-label col-md-3">Image</label>
+        <div class="col-md-9">
+            @Html.TextBox("Resim", null, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="exampleInputEmail1" class="control-label col-md-3">Is in Stock</label>
+        <div class="col-md-9">
+            Yes : @Html.RadioButton("SatistaMi", true)
+            No : @Html.RadioButton("SatistaMi", false)
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-9">
+            <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+    </div>
+   </div>
+}
+
