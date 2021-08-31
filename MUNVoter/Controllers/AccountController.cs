@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using Microsoft.Owin.Security.DataProtection;
 using MUNVoter.Identity;
 using MUNVoter.Models;
 using System;
@@ -34,6 +36,9 @@ namespace MUNVoter.Controllers
 
                 RequireUniqueEmail = true,
             };
+
+            var provider = new DpapiDataProtectionProvider("SampleAppName");
+            userManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(provider.Create("SampleTokenName"));
         }
         // GET: Account
         public ActionResult Index()
@@ -121,8 +126,38 @@ namespace MUNVoter.Controllers
         {
             var authManager = HttpContext.GetOwinContext().Authentication;
             authManager.SignOut();
-
+            
             return RedirectToAction("Login");
+        }
+
+        public ActionResult Edit()
+        {
+            ViewBag.IsEditPage = true;
+            var user = userManager.FindById(User.Identity.GetUserId());
+            return View(user);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(string newUsername, string Password, string Password1)
+        {
+            var user = userManager.FindById(User.Identity.GetUserId());
+            if (string.IsNullOrEmpty(newUsername))
+            {
+                if(Password == Password1)
+                {
+                    //var token =  userManager.GeneratePasswordResetToken(User.Identity.GetUserId());
+                    //var result = userManager.ResetPassword(User.Identity.GetUserId(), token, Password);
+                    user.PasswordHash = userManager.PasswordHasher.HashPassword(Password);
+                    userManager.Update(user);
+
+                }
+            }else
+            {
+                user.Email = newUsername;
+
+                userManager.Update(user);
+            }
+            return View(user);
         }
     }
 }

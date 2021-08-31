@@ -1,0 +1,94 @@
+﻿@model MUNVoter.Identity.ApplicationUser
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/_LayoutPageMain.cshtml";
+}
+
+<div class="col-sm-4"></div>
+<div class="col-sm-4">
+    <h1>Mun Voting App</h1>
+    <p>by Yekta Can Tursun</p>
+    <hr />
+    <h2>Edit</h2>
+
+    <div class="accordion" id="accordionExample">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Change Email
+                </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    @using (Html.BeginForm())
+                    {
+                        <div class="form-group">
+                            <label>New Email</label>
+                            @Html.TextBox("newUsername",Model.Email, new { @class = "form-control" })
+                        </div>
+                        <br />
+                        <button class="btn btn-primary" type="submit">Apply</button>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    Change Password
+                </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    @using (Html.BeginForm())
+                    {
+                        <div class="form-group">
+                            <label>Password</label>
+                            @Html.Password("Password", null, new { @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            <label>Password Again</label>
+                            @Html.Password("Password1", null, new { @class = "form-control" })
+                        </div>
+                        <div class="alert-success" id="success_doesmatch" role="alert" hidden>
+                            Password matches
+                        </div>
+                        <div class="alert-danger" id="error_doesnotmatch" role="alert" hidden>
+                            Password does not match
+                        </div>
+                        <br />
+                        <button class="btn btn-primary" id="add_btn" type="submit" disabled>Apply</button>
+                    }
+
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('input[name="Password"]').keyup(function () {
+        if ($('input[name="Password"]').val() == $('input[name="Password1"]').val()) {
+            $('button[id="add_btn"]').removeAttr('disabled');
+            $('div[id="success_doesmatch"]').removeAttr('hidden');
+            $('div[id="error_doesnotmatch"]').prop('hidden', true);
+        } else {
+            $('button[id="add_btn"]').prop('disabled', true);
+            $('div[id="success_doesmatch"]').prop('hidden', true);
+            $('div[id="error_doesnotmatch"]').removeAttr('hidden');
+        }
+    });
+
+    $('input[name="Password1"]').keyup(function () {
+        if ($('input[name="Password"]').val() == $('input[name="Password1"]').val()) {
+            $('button[id="add_btn"]').removeAttr('disabled');
+            $('div[id="success_doesmatch"]').removeAttr('hidden');
+            $('div[id="error_doesnotmatch"]').prop('hidden', true);
+        } else {
+            $('button[id="add_btn"]').prop('disabled', true);
+            $('div[id="success_doesmatch"]').prop('hidden', true);
+            $('div[id="error_doesnotmatch"]').removeAttr('hidden');
+        }
+    });
+</script>
