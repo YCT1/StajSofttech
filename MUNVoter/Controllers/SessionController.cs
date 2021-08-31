@@ -56,8 +56,9 @@ namespace MUNVoter.Controllers
             db.Complete();
             var sessionList = db.Sessions.getUserSession(User.Identity.GetUserId());
 
-            
-            return View(sessionList);
+
+            //return View(sessionList);
+            return Redirect("Index");
         }
 
         public ActionResult Delete(int sessionId)

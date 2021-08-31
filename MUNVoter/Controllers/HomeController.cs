@@ -82,7 +82,8 @@ namespace MUNVoter.Controllers
 
             ViewBag.ConferenceName = db.Sessions.findSessionById(sessionID).ConferenceName;
             ViewBag.ComitteeName = db.Sessions.findSessionById(sessionID).CommitteeName;
-            return View(db.Motions.GetMotionsBySessionId(sessionID).ToList());
+            //return View(db.Motions.GetMotionsBySessionId(sessionID).ToList());
+            return Redirect("/"+ sessionID.ToString());
             
         }
 
@@ -100,7 +101,8 @@ namespace MUNVoter.Controllers
             ViewBag.SessionID = sessionID;
             ViewBag.ConferenceName = db.Sessions.findSessionById(sessionID).ConferenceName;
             ViewBag.ComitteeName = db.Sessions.findSessionById(sessionID).CommitteeName;
-            return View("Index", db.Motions.GetMotionsBySessionId(sessionID).ToList());
+            //return View("Index", db.Motions.GetMotionsBySessionId(sessionID).ToList());
+            return Redirect("/" + sessionID.ToString());
         }
         [Route("Home/Clear/{sessionIDParameter?}")]
         public ActionResult Clear(string sessionIDParameter)
@@ -116,7 +118,8 @@ namespace MUNVoter.Controllers
             ViewBag.SessionID = sessionID;
             ViewBag.ConferenceName = db.Sessions.findSessionById(sessionID).ConferenceName;
             ViewBag.ComitteeName = db.Sessions.findSessionById(sessionID).CommitteeName;
-            return View("Index",db.Motions.GetMotionsBySessionId(sessionID).ToList());
+            //return View("Index",db.Motions.GetMotionsBySessionId(sessionID).ToList());
+            return Redirect("/" + sessionID.ToString());
         }
     }
 }
