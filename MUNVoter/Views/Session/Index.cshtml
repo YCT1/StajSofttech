@@ -19,17 +19,17 @@
             <div class="card-body">
                 @using (Html.BeginForm())
                 {
-                    <div class="form-group">
+                    <div class="form-group" id="conference">
                         <label> Conference Name</label>
                         @Html.TextBox("ConferenceName", null, new { @class = "form-control" })
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" id="committee">
                         <label> Committee Name</label>
                         @Html.TextBox("CommiteeName", null, new { @class = "form-control" })
                     </div>
                     <br />
-                    <button tpye="submit" class="btn btn-success">Submit</button>
+                    <button tpye="submit" class="btn btn-success" id="button1" disabled>Submit</button>
                 }
             </div>
         </div>
@@ -115,6 +115,22 @@
                 x.style.display = "none";
             }
         }
+
+        $('input[name="ConferenceName"]').keyup(function () {
+            if ($('input[name="ConferenceName"]').val() != '' && $('input[name="CommiteeName"]').val() != '' ) {
+                $('button[id="button1"]').removeAttr('disabled');
+            } else {
+                $('button[id="button1"]').prop('disabled', true);
+            }
+        });
+
+        $('input[name="CommiteeName"]').keyup(function () {
+            if ($('input[name="ConferenceName"]').val() != '' && $('input[name="CommiteeName"]').val() != '') {
+                $('button[id="button1"]').removeAttr('disabled');
+            } else {
+                $('button[id="button1"]').prop('disabled', true);
+            }
+        });
     </script>
 
         }

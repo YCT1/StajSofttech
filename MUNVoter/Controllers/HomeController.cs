@@ -49,9 +49,12 @@ namespace MUNVoter.Controllers
             //db.Motions.AddRange(_list);db.Complete();
 
 
-            if (!db.Sessions.isSessionExsist(sessionID) || !db.Sessions.isUserHaveRightToAccess(sessionID,User.Identity.GetUserId()))
+            if (!db.Sessions.isSessionExsist(sessionID))
             {
-                return Content("<h2>Error: Session do not exsist or you have not access to it </h2>");
+                return Content("<h2>Error: Session do not exsist or you have not an access right to it </h2>");
+            }else if (!db.Sessions.isUserHaveRightToAccess(sessionID, User.Identity.GetUserId()))
+            {
+                return Redirect("View/Index/" + sessionID);
             }
 
             //Viewbag Operations
@@ -121,5 +124,7 @@ namespace MUNVoter.Controllers
             //return View("Index",db.Motions.GetMotionsBySessionId(sessionID).ToList());
             return Redirect("/" + sessionID.ToString());
         }
+
+
     }
 }
