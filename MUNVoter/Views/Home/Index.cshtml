@@ -81,7 +81,7 @@
                     <div class="card-body">
                         <h5 class="card-title">@Model[i].type</h5>
                         <p class="card-text">@Model[i].title</p>
-                        <p class="card-text"><i>by @Model[i].sponsorCountry </i></p>
+                        <p class="card-text"><i>by @Model[i].sponsorCountry </i> <img src="@ViewBag.countryImg[i]"></p>
                         <hr>
                         @if (Model[i].type == "Extention" || Model[i].type == "Unmoderated")
                         {

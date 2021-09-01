@@ -24,7 +24,11 @@ namespace MUNVoter.Controllers
                 
                 return Redirect("session/index");
             }
-            int sessionID = int.Parse(sessionIDParameter);
+            int sessionID;
+            if(!int.TryParse(sessionIDParameter, out sessionID))
+            {
+                return Redirect("session/index");
+            }
             // Old one
             /*
             ViewBag.motionNumber = Database.Motions.Count;
@@ -47,7 +51,8 @@ namespace MUNVoter.Controllers
 
             };
             //db.Motions.AddRange(_list);db.Complete();
-
+            //CountryFlag test = new CountryFlag() { CountryName = "Turkey", CountryCode = "TR", ImgCode = "TR.jpg" };
+            //db.CountryFlags.Add(test); db.Complete();
 
             if (!db.Sessions.isSessionExsist(sessionID))
             {
@@ -64,7 +69,10 @@ namespace MUNVoter.Controllers
             
             ViewBag.ConferenceName = db.Sessions.findSessionById(sessionID).ConferenceName;
             ViewBag.ComitteeName = db.Sessions.findSessionById(sessionID).CommitteeName;
-            return View(db.Motions.GetMotionsBySessionId(sessionID).ToList());
+
+            List<Motion> motions = db.Motions.GetMotionsBySessionId(sessionID).ToList();
+            ViewBag.countryImg = db.CountryFlags.FindImageAddressesByMotions(motions);
+            return View(motions);
         }
 
         [HttpPost]
@@ -75,6 +83,11 @@ namespace MUNVoter.Controllers
             int sessionID = int.Parse(sessionIDParameter);
             var db = new UnitOfWork(new DatabaseContext());
 
+            // Let's check if the user enter country code as two letter
+            if(country.Length == 2)
+            {
+                country = db.CountryFlags.FindCountryNameByCode(country);
+            }
             Motion newMotion = new Motion() { title = title, type = type, sponsorCountry = country, totalTime = totalTime, indTime = indTime, SessionId=sessionID };
             db.Motions.Add(newMotion);
 

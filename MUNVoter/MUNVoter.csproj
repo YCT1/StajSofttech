@@ -155,8 +155,11 @@
     <Compile Include="Identity\ApplicationRole.cs" />
     <Compile Include="Identity\ApplicationUser.cs" />
     <Compile Include="Identity\IdentityDataContext.cs" />
+    <Compile Include="Models\CountryFlag.cs" />
+    <Compile Include="Models\CountryFlagRepositry.cs" />
     <Compile Include="Models\Database.cs" />
     <Compile Include="Models\DatabaseContext.cs" />
+    <Compile Include="Models\ICountryFlagRepository.cs" />
     <Compile Include="Models\IMotionRepository.cs" />
     <Compile Include="Models\IRepository.cs" />
     <Compile Include="Models\ISessionRepository.cs" />

@@ -10,6 +10,8 @@ namespace MUNVoter.Models
     {
         IMotionRepository Motions { get; }
         ISessionRepository Sessions { get; }
+
+        ICountryFlagRepository CountryFlags { get; }
         int Complete();
     }
 }

@@ -22,7 +22,9 @@ namespace MUNVoter.Controllers
             ViewBag.SessionID = sessionID;
             ViewBag.ConferenceName = db.Sessions.findSessionById(sessionID).ConferenceName;
             ViewBag.ComitteeName = db.Sessions.findSessionById(sessionID).CommitteeName;
-            return View(db.Motions.GetMotionsBySessionId(sessionID).ToList());
+            List<Motion> motions = db.Motions.GetMotionsBySessionId(sessionID).ToList();
+            ViewBag.countryImg = db.CountryFlags.FindImageAddressesByMotions(motions);
+            return View(motions);
         }
     }
 }

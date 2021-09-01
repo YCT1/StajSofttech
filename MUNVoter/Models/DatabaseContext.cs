@@ -16,5 +16,6 @@ namespace MUNVoter.Models
         public DbSet<Motion> Motions { get; set; }
         public DbSet<Session> Sessions { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<CountryFlag> CountryFlags { get; set; }
     }
 }

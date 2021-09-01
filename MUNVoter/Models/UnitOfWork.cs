@@ -15,11 +15,13 @@ namespace MUNVoter.Models
             _context = context;
             Motions = new MotionRepository(_context);
             Sessions = new SessionRepository(_context);
+            CountryFlags = new CountryFlagRepositry(_context);
         }
 
         public IMotionRepository Motions { get; private set; }
         public ISessionRepository Sessions { get; private set; }
 
+        public ICountryFlagRepository CountryFlags { get; private set; }
         public int Complete()
         {
             try
