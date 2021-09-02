@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using MUNVoter.Models;
 using Microsoft.AspNet.Identity;
+using MUNVoter.Hubs;
+
 namespace MUNVoter.Controllers
 {
     //[Authorize]
@@ -90,8 +92,9 @@ namespace MUNVoter.Controllers
             }
             Motion newMotion = new Motion() { title = title, type = type, sponsorCountry = country, totalTime = totalTime, indTime = indTime, SessionId=sessionID };
             db.Motions.Add(newMotion);
-
+            
             db.Complete();
+            SessionHub.BroadcastData();
 
             ViewBag.motionNumber = db.Motions.GetMotionNumberBySessionId(sessionID);
             ViewBag.SessionID = sessionID;
@@ -111,7 +114,9 @@ namespace MUNVoter.Controllers
             int sessionID = int.Parse(sessionIDParameter);
             var db = new UnitOfWork(new DatabaseContext());
             db.Motions.DeleteFirst(sessionID);
+          
             db.Complete();
+            SessionHub.BroadcastData();
 
             ViewBag.motionNumber = db.Motions.GetMotionNumberBySessionId(sessionID);
             ViewBag.SessionID = sessionID;
@@ -129,7 +134,7 @@ namespace MUNVoter.Controllers
             var db = new UnitOfWork(new DatabaseContext());
             db.Motions.RemoveRange(db.Motions.GetMotionsBySessionId(sessionID));
             db.Complete();
-
+            SessionHub.BroadcastData();
             ViewBag.motionNumber = db.Motions.GetMotionNumberBySessionId(sessionID);
             ViewBag.SessionID = sessionID;
             ViewBag.ConferenceName = db.Sessions.findSessionById(sessionID).ConferenceName;

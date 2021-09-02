@@ -65,3 +65,21 @@
 </div>
 
 
+
+    
+    <script type="text/javascript">
+
+        $(function () {
+            var hubNotify = $.connection.SessionHub;
+
+            $.connection.hub.start().done(function () {
+                //location.reload();
+            });
+
+            hubNotify.client.refreshSessionPage = function () {
+                location.reload();
+            };
+        });
+        
+    </script>
+ 
