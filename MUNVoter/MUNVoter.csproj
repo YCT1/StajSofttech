@@ -201,6 +201,7 @@
     <Content Include="Views\Session\Index.cshtml" />
     <Content Include="Views\Account\Edit.cshtml" />
     <Content Include="Views\View\Index.cshtml" />
+    <Content Include="Views\View\ProjectionView.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

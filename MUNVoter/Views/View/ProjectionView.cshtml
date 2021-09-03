@@ -1,0 +1,112 @@
+﻿@model List<MUNVoter.Models.Motion>
+@{
+    ViewBag.Title = "ProjectionView";
+    Layout = null;
+}
+<!DOCTYPE html>
+
+<html>
+
+    <head>
+        <title>@ViewBag.Title</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Calculator</title>
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <style>
+        </style>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+        <script src="~/Scripts/jquery.signalR-2.4.2.min.js"></script>
+        <script src="/signalr/hubs"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    </head>
+
+    <body>
+        <div class="container">
+            <hr>
+            <div class="row">
+                <div class="col-sm-0.5"></div>
+                <div class="col-12">
+
+
+                    @if (ViewBag.motionNumber > 0)
+                    {
+                        <h4>Number of Proposed Motion: @ViewBag.motionNumber</h4>
+
+                        for (int i = 0; i < ViewBag.motionNumber; i++)
+                        {
+                            {
+
+                                string test = "";
+                                if (i == 0)
+                                {
+                                    test = "card border-success mb-2 w-125";
+                                }
+                                else
+                                {
+                                    test = "card mb-2 w-125";
+                                }
+
+
+
+                                <div class="@test">
+
+                                    @if (i == 0)
+                                    {
+                                        <h4 class="card-header" style="color: green;"><b>Voting</b></h4>
+
+
+                                    }
+
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm-3"> <h4 class="card-text">  <img src="@ViewBag.countryImg[i]" class="img-fluid">  @Model[i].type</h4></div>
+                                            <div class="col-sm-7">
+                                            <h5 class="card-text"><b> @Model[i].title </b> <i> by 
+                                             @Model[i].sponsorCountry </i> </h5> </div>
+                                            @if (Model[i].indTime == null)
+                                            {
+                                                <div class="col-lg-2"> <h5 class="card-text"> Total:<b> @Model[i].totalTime min.</b> </h5></div>
+                                            }
+                                            else
+                                            {
+                                                <div class="col-lg-2"><h5 class="card-text"> Total: <b> @Model[i].totalTime min.</b><br/> Ind:<b> @Model[i].indTime sec.</b></h5></div>
+                                            }
+                                        
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+
+
+                        }
+                    }
+                    else
+                    {
+                        <h2>There is no motion in the list</h2>
+                    }
+                </div>
+
+
+                <script type="text/javascript">
+
+                    $(function () {
+                        var hubNotify = $.connection.SessionHub;
+
+                        $.connection.hub.start().done(function () {
+                            //location.reload();
+                        });
+
+                        hubNotify.client.refreshSessionPage = function () {
+                            location.reload();
+                        };
+                    });
+
+                </script>
+            </div>
+        </div>
+    </body>
+</html>
