@@ -76,9 +76,13 @@
                 //location.reload();
             });
 
-            hubNotify.client.refreshSessionPage = function () {
-                location.reload();
-            };
+            hubNotify.client.refreshSessionPage = function (i) {
+                if (i == @ViewBag.SessionID) {
+                    location.reload();
+                    console.log("True");
+                }
+                               
+           };
         });
         
     </script>

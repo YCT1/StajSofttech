@@ -94,7 +94,9 @@ namespace MUNVoter.Controllers
             db.Motions.Add(newMotion);
             
             db.Complete();
-            SessionHub.BroadcastData();
+
+            //SessionHub.BroadcastData();
+            SessionHub.BroadCastDataSpesfic(sessionID);
 
             ViewBag.motionNumber = db.Motions.GetMotionNumberBySessionId(sessionID);
             ViewBag.SessionID = sessionID;
@@ -108,15 +110,25 @@ namespace MUNVoter.Controllers
 
 
         [Route("Home/Delete/{sessionIDParameter?}")]
-        
+        [Authorize]
         public ActionResult Delete(string sessionIDParameter)
         {
             int sessionID = int.Parse(sessionIDParameter);
             var db = new UnitOfWork(new DatabaseContext());
+
+            // Firtly let's check that autonticated user is the owener of the user, 
+            // If not, let's redirect back to view only page
+            Session thisSession = db.Sessions.findSessionById(sessionID);
+            if(thisSession.UserId != User.Identity.GetUserId())
+            {
+                return Redirect("/" + sessionID.ToString());
+            }
             db.Motions.DeleteFirst(sessionID);
           
             db.Complete();
-            SessionHub.BroadcastData();
+
+            //SessionHub.BroadcastData();
+            SessionHub.BroadCastDataSpesfic(sessionID);
 
             ViewBag.motionNumber = db.Motions.GetMotionNumberBySessionId(sessionID);
             ViewBag.SessionID = sessionID;
@@ -132,15 +144,79 @@ namespace MUNVoter.Controllers
             int sessionID = int.Parse(sessionIDParameter);
             //int sessionID = 0;
             var db = new UnitOfWork(new DatabaseContext());
+
+            // Firtly let's check that autonticated user is the owener of the user, 
+            // If not, let's redirect back to view only page
+            Session thisSession = db.Sessions.findSessionById(sessionID);
+            if (thisSession.UserId != User.Identity.GetUserId())
+            {
+                return Redirect("/" + sessionID.ToString());
+            }
+
             db.Motions.RemoveRange(db.Motions.GetMotionsBySessionId(sessionID));
             db.Complete();
-            SessionHub.BroadcastData();
+
+            //SessionHub.BroadcastData();
+            SessionHub.BroadCastDataSpesfic(sessionID);
+
             ViewBag.motionNumber = db.Motions.GetMotionNumberBySessionId(sessionID);
             ViewBag.SessionID = sessionID;
             ViewBag.ConferenceName = db.Sessions.findSessionById(sessionID).ConferenceName;
             ViewBag.ComitteeName = db.Sessions.findSessionById(sessionID).CommitteeName;
             //return View("Index",db.Motions.GetMotionsBySessionId(sessionID).ToList());
             return Redirect("/" + sessionID.ToString());
+        }
+
+        [HttpPost]
+        [Route("Home/Edit")]
+        public ActionResult Edit(string sessionIDParameter, int id, string title, string type, string country, float totalTime, float? indTime)
+        {
+            int sessionID = int.Parse(sessionIDParameter);
+            var db = new UnitOfWork(new DatabaseContext());
+
+            // Firtly let's check that autonticated user is the owener of the user, 
+            // If not, let's redirect back to view only page
+            Session thisSession = db.Sessions.findSessionById(sessionID);
+            if (thisSession.UserId != User.Identity.GetUserId())
+            {
+                return Redirect("/" + sessionID.ToString());
+            }
+
+
+            db.Motions.Remove(db.Motions.Get(id));
+
+            if (country.Length == 2)
+            {
+                country = db.CountryFlags.FindCountryNameByCode(country);
+            }
+
+            Motion newMotion = new Motion() { title = title, type = type, sponsorCountry = country, totalTime = totalTime, indTime = indTime, SessionId = sessionID };
+            db.Motions.Add(newMotion);
+            db.Complete();
+            SessionHub.BroadCastDataSpesfic(sessionID);
+            return Redirect("/" + sessionID.ToString());
+        }
+
+        [Authorize]
+        public ActionResult DeleteMotion(string sessionIDParameter, int id)
+        {
+            var db = new UnitOfWork(new DatabaseContext());
+            int sessionID = int.Parse(sessionIDParameter);
+
+            // Firtly let's check that autonticated user is the owener of the user, 
+            // If not, let's redirect back to view only page
+            Session thisSession = db.Sessions.findSessionById(sessionID);
+            if (thisSession.UserId != User.Identity.GetUserId())
+            {
+                return Redirect("/" + sessionID.ToString());
+            }
+
+            db.Motions.Remove(db.Motions.Get(id));
+            db.Complete();
+            SessionHub.BroadCastDataSpesfic(sessionID);
+            return Redirect("/" + sessionID.ToString());
+            
+            
         }
 
 

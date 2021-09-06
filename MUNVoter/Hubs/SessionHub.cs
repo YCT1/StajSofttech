@@ -14,6 +14,13 @@ namespace MUNVoter.Hubs
         {
             IHubContext context = GlobalHost.ConnectionManager.GetHubContext<SessionHub>();
             context.Clients.All.refreshSessionPage();
+            
+        }
+
+        public static void BroadCastDataSpesfic(int sessionId)
+        {
+            IHubContext context = GlobalHost.ConnectionManager.GetHubContext<SessionHub>();
+            context.Clients.All.refreshSessionPage(sessionId);
         }
     }
 }
