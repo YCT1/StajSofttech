@@ -101,7 +101,7 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-sm-3"> <h4 class="card-text">  <img src="@ViewBag.countryImg[i]" class="img-fluid">  @Model[i].type</h4></div>
-                                            <div class="col-sm-7">
+                                            <div class="col-sm-7 align-self-center">
                                                 <h5 class="card-text">
                                                     <b> @Model[i].title </b> <i>
                                                         by
@@ -109,14 +109,18 @@
                                                     </i>
                                                 </h5>
                                             </div>
-                                            @if (Model[i].indTime == null)
+                                            @if (Model[i].totalTime != null)
                                             {
-                                                <div class="col-lg-2"> <h5 class="card-text"> Total:<b> @Model[i].totalTime min.</b> </h5></div>
+                                                if (Model[i].indTime == null)
+                                                {
+                                                    <div class="col-lg-2"> <h5 class="card-text"> Total:<b> @Model[i].totalTime min.</b> </h5></div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="col-lg-2"><h5 class="card-text"> Total: <b> @Model[i].totalTime min.</b><br /> Ind:<b> @Model[i].indTime sec.</b></h5></div>
+                                                }
                                             }
-                                            else
-                                            {
-                                                <div class="col-lg-2"><h5 class="card-text"> Total: <b> @Model[i].totalTime min.</b><br /> Ind:<b> @Model[i].indTime sec.</b></h5></div>
-                                            }
+
 
                                         </div>
                                     </div>

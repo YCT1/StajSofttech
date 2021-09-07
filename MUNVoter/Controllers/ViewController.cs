@@ -1,5 +1,8 @@
-﻿using MUNVoter.Models;
+﻿using Microsoft.AspNet.SignalR;
+using MUNVoter.Hubs;
+using MUNVoter.Models;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -27,6 +30,8 @@ namespace MUNVoter.Controllers
             return View(motions);
         }
 
+        
+
         [Route("View/Projection/{sessionID?}")]
         public ActionResult ProjectionView(int sessionID)
         {
@@ -42,6 +47,10 @@ namespace MUNVoter.Controllers
             ViewBag.ComitteeName = db.Sessions.findSessionById(sessionID).CommitteeName;
             List<Motion> motions = db.Motions.GetMotionsBySessionId(sessionID).ToList();
             ViewBag.countryImg = db.CountryFlags.FindImageAddressesByMotions(motions);
+
+            // Experimental
+            IHubContext context = GlobalHost.ConnectionManager.GetHubContext<SessionHub>();
+            
             return View(motions);
         }
     }

@@ -12,6 +12,7 @@ namespace MUNVoter.Controllers
     //[Authorize]
     public class HomeController : Controller
     {
+        
        
         // GET: Home
         
@@ -41,7 +42,7 @@ namespace MUNVoter.Controllers
 
             //int sessionID = 0;
             var db = new UnitOfWork(new DatabaseContext());
-
+            /*
             List<Motion> _list = new List<Motion>()
             {
                 new Motion(){title="Discussing Women Rights in Afganistan" , type="Moderated", sponsorCountry="Turkey", totalTime=10, indTime=60,SessionId=0},
@@ -51,7 +52,7 @@ namespace MUNVoter.Controllers
                 new Motion(){title="Prev Motion" , type="Extention", sponsorCountry="Tuvalu", totalTime=5, indTime=60,SessionId=0},
                 new Motion(){title="EU Relation with Taliban" , type="Moderated", sponsorCountry="Bulgaristan", totalTime=10, indTime=60,SessionId=1},
 
-            };
+            };*/
             //db.Motions.AddRange(_list);db.Complete();
             //CountryFlag test = new CountryFlag() { CountryName = "Turkey", CountryCode = "TR", ImgCode = "TR.jpg" };
             //db.CountryFlags.Add(test); db.Complete();
@@ -79,11 +80,22 @@ namespace MUNVoter.Controllers
 
         [HttpPost]
         [Route("{sessionIDParameter?}")]
-        public ActionResult Index(string sessionIDParameter, string title, string type,  string country, float totalTime, float? indTime) {
+        public ActionResult Index(string sessionIDParameter, string title, string type,  string country, float? totalTime, float? indTime, string titleVoting, string titlePaper, string titleDebate) {
 
             //string sessionIDParameter = "0";
             int sessionID = int.Parse(sessionIDParameter);
             var db = new UnitOfWork(new DatabaseContext());
+
+            if(type == "Voting")
+            {
+                title = titleVoting;
+            }else if(type == "Paper")
+            {
+                title = titlePaper;
+            }else if(type == "Debate")
+            {
+                title = titleDebate;
+            }
 
             // Let's check if the user enter country code as two letter
             if(country.Length == 2)
@@ -91,6 +103,7 @@ namespace MUNVoter.Controllers
                 country = db.CountryFlags.FindCountryNameByCode(country);
             }
             Motion newMotion = new Motion() { title = title, type = type, sponsorCountry = country, totalTime = totalTime, indTime = indTime, SessionId=sessionID };
+            newMotion.calculateOrder();
             db.Motions.Add(newMotion);
             
             db.Complete();
@@ -169,7 +182,7 @@ namespace MUNVoter.Controllers
 
         [HttpPost]
         [Route("Home/Edit")]
-        public ActionResult Edit(string sessionIDParameter, int id, string title, string type, string country, float totalTime, float? indTime)
+        public ActionResult Edit(string sessionIDParameter, int id, string title, string type, string country, float? totalTime, float? indTime)
         {
             int sessionID = int.Parse(sessionIDParameter);
             var db = new UnitOfWork(new DatabaseContext());

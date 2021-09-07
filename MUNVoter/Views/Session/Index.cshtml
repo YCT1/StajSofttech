@@ -150,6 +150,7 @@
             var button = document.getElementById("copyButton_" + i);
            
             button.innerHTML = "Copied";
+            button.className = "btn btn-success";
             /* Alert the copied text */
             //alert("Copied the text: " + domain + "/" + i);
         }
@@ -157,6 +158,7 @@
         function changeToNormal(i) {
             var button = document.getElementById("copyButton_" + i);
             button.innerHTML = "Copy";
+            button.className = "btn btn-outline-primary";
         }
 
     </script>
