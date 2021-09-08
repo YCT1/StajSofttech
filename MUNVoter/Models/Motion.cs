@@ -65,7 +65,7 @@ namespace MUNVoter.Models
             {
                 if(a.totalTime == null || b.totalTime == null)
                 {
-                    return true;
+                    return false;
                 }else if (a.totalTime == b.totalTime)
                 {
                     if(a.indTime == null || b.indTime == null)

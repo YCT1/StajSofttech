@@ -217,6 +217,7 @@ namespace MUNVoter.Controllers
             }
 
             Motion newMotion = new Motion() { title = title, type = type, sponsorCountry = country, totalTime = totalTime, indTime = indTime, SessionId = sessionID };
+            newMotion.calculateOrder();
             db.Motions.Add(newMotion);
             db.Complete();
             SessionHub.BroadCastDataSpesfic(sessionID);
