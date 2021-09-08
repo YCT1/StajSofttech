@@ -182,7 +182,7 @@ namespace MUNVoter.Controllers
 
         [HttpPost]
         [Route("Home/Edit")]
-        public ActionResult Edit(string sessionIDParameter, int id, string title, string type, string country, float? totalTime, float? indTime)
+        public ActionResult Edit(string sessionIDParameter, int id, string title, string type, string country, float? totalTime, float? indTime, string titleVoting, string titlePaper, string titleDebate)
         {
             int sessionID = int.Parse(sessionIDParameter);
             var db = new UnitOfWork(new DatabaseContext());
@@ -195,6 +195,19 @@ namespace MUNVoter.Controllers
                 return Redirect("/" + sessionID.ToString());
             }
 
+            // New type support
+            if (type == "Voting")
+            {
+                title = titleVoting;
+            }
+            else if (type == "Paper")
+            {
+                title = titlePaper;
+            }
+            else if (type == "Debate")
+            {
+                title = titleDebate;
+            }
 
             db.Motions.Remove(db.Motions.Get(id));
 

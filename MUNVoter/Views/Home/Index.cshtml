@@ -116,7 +116,7 @@
                                 </h5>
                             </div>
                             <div class="col-3">
-                                <button class="btn btn-success btn-sm float-end" data-bs-toggle="modal" data-bs-target="#test_@Model[i].Id">
+                                <button class="btn btn-success btn-sm float-end" data-bs-toggle="modal" data-bs-target="#test_@Model[i].Id" onClick="editUIHandler(@Model[i].Id)">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
                                         <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z" />
                                     </svg>
@@ -127,11 +127,11 @@
                         <p class="card-text">@Model[i].title</p>
                         <p class="card-text"><i>by @Model[i].sponsorCountry </i> <img src="@ViewBag.countryImg[i]"></p>
                         <hr>
-                        @if (Model[i].type == "Extention" || Model[i].type == "Unmoderated")
+                        @if (Model[i].totalTime != null && Model[i].indTime == null)
                         {
                             <p class="card-text">Total Time: <b>@Model[i].totalTime min</b></p>
                         }
-                        else
+                        else if (Model[i].totalTime != null && Model[i].indTime != null)
                         {
                             <p class="card-text">Total Time: <b>@Model[i].totalTime min</b>,  Individual Time: <b>@Model[i].indTime seconds</b></p>
                         }
@@ -154,49 +154,96 @@
 
                         <div class="form-group">
                             <label for="Operation">Motion Type</label>
-                            <select class="form-control" size="3" name="type">
-                                @if (Model[i].type == "Moderated")
-                                {
-                                    <option value="Moderated" selected>Moderated Caucus</option>
-                                    <option value="Unmoderated">Unmoderated Caucus</option>
-                                    <option value="Extention">Extention</option>
-                                }
-                                else if (Model[i].type == "Unmoderated")
-                                {
-                                    <option value="Moderated">Moderated Caucus</option>
-                                    <option value="Unmoderated" selected>Unmoderated Caucus</option>
-                                    <option value="Extention">Extention</option>
-                                }
-                                else if (Model[i].type == "Extention")
-                                {
-                                    <option value="Moderated">Moderated Caucus</option>
-                                    <option value="Unmoderated">Unmoderated Caucus</option>
-                                    <option value="Extention" selected>Extention</option>
+                            <select class="form-control" size="7" name="type_@Model[i].Id">
+                                @{
+                                    string[] value = new string[7];
+
+                                    if (Model[i].type == "Moderated")
+                                    {
+                                        value[0] = "selected";
+                                    }
+                                    else if (Model[i].type == "Unmoderated")
+                                    {
+                                        value[1] = "selected";
+                                    }
+                                    else if (Model[i].type == "Extention")
+                                    {
+                                        value[2] = "selected";
+                                    }
+                                    else if (Model[i].type == "Agenda")
+                                    {
+                                        value[3] = "selected";
+                                    }
+                                    else if (Model[i].type == "Voting")
+                                    {
+                                        value[4] = "selected";
+                                    }
+                                    else if (Model[i].type == "Debate")
+                                    {
+                                        value[5] = "selected";
+                                    }
+                                    else if (Model[i].type == "Paper")
+                                    {
+                                        value[6] = "selected";
+                                    }
+
+                                    <option value="Moderated" @value[0]>Moderated Caucus</option>
+                                    <option value="Unmoderated" @value[1]>Unmoderated Caucus</option>
+                                    <option value="Extention" @value[2]>Extention</option>
+                                    <option value="Agenda" @value[3]>Set the Agenda</option>
+                                    <option value="Voting" @value[4]>Voting Motions</option>
+                                    <option value="Debate" @value[5]>Debate Motions</option>
+                                    <option value="Paper" @value[6]>Paper Motions</option>
                                 }
 
                             </select>
-
                         </div>
-                        <div class="form-group">
+
+                        <div id="titleOption" class="form-group" hidden>
                             <label for="Number Two">Motion Title</label>
-                            @Html.TextBox("title", Model[i].title, new { @class = "form-control" })
+                            <select class="form-control" size="3" name="titleVoting">
+                                <option value="Divide the House" selected>Divide the House</option>
+                                <option value="Divide the Question">Divide the Question</option>
+                                <option value="Roll Call Vote">Roll Call Vote</option>
+                            </select>
+                        </div>
+
+                        <div id="titleOption_paper" class="form-group" hidden>
+                            <label for="Number Two">Motion Title</label>
+                            <select class="form-control" size="2" name="titlePaper">
+                                <option value="Introduce a Draft Resolution" selected>Introduce a Draft Resolution</option>
+                                <option value="Introduce an Amendment">Introduce an Amendment</option>
+                            </select>
+                        </div>
+
+                        <div id="titleOption_debate" class="form-group" hidden>
+                            <label for="Number Two">Motion Title</label>
+                            <select class="form-control" size="3" name="titleDebate">
+                                <option value="Close the Debate" selected>Close the Debate</option>
+                                <option value="Postpone the Debate">Postpone the Debate</option>
+                                <option value="Resume the Debate">Resume the Debate</option>
+                            </select>
+                        </div>
+
+                        <div id="titleTextBox" class="form-group">
+                            <label for="Number Two">Motion Title</label>
+                            @Html.TextBox("title", Model[i].title, new { @class = "form-control" , @id=Model[i].Id + "_title"})
                         </div>
 
                         <div class="form-group">
                             <label for="Number Two">Country</label>
-                            @Html.TextBox("country", Model[i].sponsorCountry, new { @class = "form-control" })
+                            @Html.TextBox("country", Model[i].sponsorCountry, new { @class = "form-control" , @id = Model[i].Id + "_country" })
                         </div>
                         <div class="form-group">
                             <label for="Number Two">Total Time</label>
-                            @Html.TextBox("totalTime", Model[i].totalTime, new { @class = "form-control", @type = "number", @step = "0.01", @min = 0, @max = 20 })
+                            @Html.TextBox("totalTime", Model[i].totalTime, new { @class = "form-control", @type = "number", @step = "0.01", @min = 0, @max = 20, @id = Model[i].Id + "totalTime" })
                         </div>
-                        @if (Model[i].type != "Unmoderated")
-                        {
-                            <div class="form-group">
-                                <label for="Number Two">Individual Time</label>
-                                @Html.TextBox("indTime", Model[i].indTime, new { @class = "form-control", @type = "number", @step = "0.01" })
-                            </div>
-                        }
+
+                        <div class="form-group">
+                            <label for="Number Two">Individual Time</label>
+                            @Html.TextBox("indTime", Model[i].indTime, new { @class = "form-control", @type = "number", @step = "0.01", @id = Model[i].Id + "_indTime" })
+                        </div>
+
 
 
 
@@ -204,9 +251,9 @@
                     </div>
                             <div class="modal-footer">
                                 @Html.ActionLink("Delete", "DeleteMotion", "Home",new { sessionIDParameter = ViewBag.SessionID, id = Model[i].Id }, new { @class="btn btn-danger"})
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button  type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 
-                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                                <button id="save_btn_@Model[i].Id" type="submit" class="btn btn-primary">Save Changes</button>
                             </div>
                         }
                     </div>
@@ -226,86 +273,152 @@
 </div>
 
 <script>
-    $('input[name="country"]').keyup(function () {
-        if (($('input[name="country"]').val() != '' && $('input[name="title"]').val() != '' && $('input[name="totalTime"]').val() != '')|| $('select[name="type"]').val() == "Voting") {
-            $('input[id="add_btn"]').removeAttr('disabled');
+
+    function editUIHandler(motionID) {
+        console.log("MotionID: " + motionID);
+        //motionID ="_"+ motionID;
+        inputTextFieldHandler(motionID);
+        console.log('input[id="' + motionID + '_country"]');
+        console.log('button[id="save_btn_' + motionID + '"]');
+        console.log('select[name = "type_' + motionID + '"]');
+        if ($('select[name="type_' + motionID + '"]').val() == 'Moderated' || $('select[name="type_' + motionID + '"]').val() == 'Unmoderated' || $('select[name="type_' + motionID + '"]').val() == 'Extention') {
+            if ($('input[id="' + motionID + '_country"]').val() != '' && $('id[name="' + motionID + '_title"]').val() != '' && $('id[name="' + motionID +'_totalTime"]').val() != '') {
+                $('button[id="save_btn_' + motionID +'"]').removeAttr('disabled');
+            } else {
+                $('button[id="save_btn_' + motionID +'"]').prop('disabled', true);
+            }
         } else {
-            $('input[id="add_btn"]').prop('disabled', true);
+            if ($('input[id="' + motionID + '_country"]').val() != '') {
+                $('button[id="save_btn_' + motionID +'"]').removeAttr('disabled');
+            } else {
+                $('button[id="save_btn_' + motionID +'"]').prop('disabled', true);
+            }
         }
+    }
+    function checkForButton() {
+        if ($('select[name="type"]').val() == 'Moderated' || $('select[name="type"]').val() == 'Unmoderated' || $('select[name="type"]').val() == 'Extention') {
+            if ($('input[name="country"]').val() != '' && $('input[name="title"]').val() != '' && $('input[name="totalTime"]').val() != '') {
+                $('input[id="add_btn"]').removeAttr('disabled');
+            } else {
+                $('input[id="add_btn"]').prop('disabled', true);
+            }
+        } else {
+            if ($('input[name="country"]').val() != '') {
+                $('input[id="add_btn"]').removeAttr('disabled');
+            } else {
+                $('input[id="add_btn"]').prop('disabled', true);
+            }
+        }
+    }
+
+    function inputTextFieldHandler(type) {
+        checkForButton();
+        if ($('select[name="type' + type + '"]').val() == 'Moderated' || $('select[name="type' + type + '"]').val() == 'Unmoderated' || $('select[name="type' + type + '"]').val() == 'Extention') {
+
+            $('div[ id="titleTextBox"]').removeAttr('hidden');
+            $('div[ id="titleOption"]').prop('hidden', true);
+            $('div[ id="titleOption_paper"]').prop('hidden', true);
+            $('div[ id="titleOption_debate"]').prop('hidden', true);
+            $('input[ name="totalTime"]').attr("placeholder", "in minutes");
+            $('input[ name="totalTime"]').removeAttr('disabled');
+
+            if ($('select[name="type' + type + '"]').val() == 'Moderated') {
+                $('input[ name="indTime"]').removeAttr('disabled');
+                $('input[ name="indTime"]').attr("placeholder", "in seconds");
+
+
+
+            } else if ($('select[name="type' + type + '"]').val() == 'Unmoderated') {
+                $('input[ name="indTime"]').prop('disabled', true);
+                $('input[ name="indTime"]').attr("placeholder", "Unmoderated Motions do not have an individual time");
+                $('input[ name="indTime"]').val('');
+
+
+
+            } else if ($('select[name="type' + type + '"]').val() == 'Extention') {
+                $('input[ name="indTime"]').removeAttr('disabled');
+                $('input[ name="indTime"]').attr("placeholder", "in seconds");
+
+            }
+        } else {
+            clearTimeInputs()
+            $('input[ name="indTime"]').prop('disabled', true);
+            $('input[ name="totalTime"]').attr("placeholder", "This motion type does not have total time");
+            $('input[ name="indTime"]').attr("placeholder", "This motion type does not have individual time");
+            $('input[ name="totalTime"]').prop('disabled', true);
+            if ($('select[name="type' + type + '"]').val() == 'Agenda') {
+
+
+                $('div[ id="titleTextBox"]').removeAttr('hidden');
+                $('div[ id="titleOption"]').prop('hidden', true);
+                $('div[ id="titleOption_paper"]').prop('hidden', true);
+                $('div[ id="titleOption_debate"]').prop('hidden', true);
+            } else if ($('select[name="type' + type + '"]').val() == 'Voting') {
+
+                $('div[ id="titleOption"]').removeAttr('hidden');
+                $('div[ id="titleTextBox"]').prop('hidden', true);
+                $('div[ id="titleOption_paper"]').prop('hidden', true);
+                $('div[ id="titleOption_debate"]').prop('hidden', true);
+            } else if ($('select[name="type' + type + '"]').val() == 'Paper') {
+
+                $('div[ id="titleOption_paper"]').removeAttr('hidden');
+                $('div[ id="titleOption"]').prop('hidden', true);
+                $('div[ id="titleTextBox"]').prop('hidden', true);
+                $('div[ id="titleOption_debate"]').prop('hidden', true);
+            } else if ($('select[name="type' + type + '"]').val() == 'Debate') {
+
+                $('div[ id="titleOption_debate"]').removeAttr('hidden');
+                $('div[ id="titleOption"]').prop('hidden', true);
+                $('div[ id="titleTextBox"]').prop('hidden', true);
+                $('div[ id="titleOption_paper"]').prop('hidden', true);
+            }
+        }
+    }
+    function clearTimeInputs() {
+        $('input[ name="indTime"]').val('');
+        $('input[ name="totalTime"]').val('');
+    }
+
+    $('input[name="country"]').keyup(function () {
+        checkForButton();
+
     });
 
     $('input[name="title"]').keyup(function () {
-        if (($('input[name="title"]').val() != '' && $('input[name="country"]').val() && $('input[name="totalTime"]').val() != '') ) {
-            $('input[id="add_btn"]').removeAttr('disabled');
-        } else {
-            $('input[id="add_btn"]').prop('disabled', true);
-        }
+        checkForButton();
     });
 
     $('input[name="totalTime"]').keyup(function () {
-        if ($('input[name="title"]').val() != '' && $('input[name="country"]').val() && $('input[name="totalTime"]').val() != '') {
-            $('input[id="add_btn"]').removeAttr('disabled');
-        } else {
-            $('input[id="add_btn"]').prop('disabled', true);
-        }
+        checkForButton();
     });
 
     $('select[name="type"]').click(function () {
-        if ($(this).val() == 'Moderated') {
-            $('input[ name="indTime"]').removeAttr('disabled');
-            $('input[ name="indTime"]').attr("placeholder", "in Seconds");
-            $('input[ name="totalTime"]').removeAttr('disabled');
-
-            $('div[ id="titleTextBox"]').removeAttr('hidden');
-            $('div[ id="titleOption"]').prop('hidden', true);
-            $('div[ id="titleOption_paper"]').prop('hidden', true);
-            $('div[ id="titleOption_debate"]').prop('hidden', true);
-        } else if ($(this).val() == 'Unmoderated') {
-            $('input[ name="indTime"]').prop('disabled', true);
-            $('input[ name="indTime"]').attr("placeholder", "Unmoderated Motions do not have an individual time");
-            $('input[ name="indTime"]').val('');
-            $('input[ name="totalTime"]').removeAttr('disabled');
-
-            $('div[ id="titleTextBox"]').removeAttr('hidden');
-            $('div[ id="titleOption"]').prop('hidden', true);
-            $('div[ id="titleOption_paper"]').prop('hidden', true);
-            $('div[ id="titleOption_debate"]').prop('hidden', true);
-        } else if ($(this).val() == 'Extention') {
-            $('input[ name="indTime"]').removeAttr('disabled');
-            $('input[ name="indTime"]').attr("placeholder", "in Seconds");
-            $('input[ name="totalTime"]').removeAttr('disabled');
-
-            $('div[ id="titleTextBox"]').removeAttr('hidden');
-            $('div[ id="titleOption"]').prop('hidden', true);
-            $('div[ id="titleOption_paper"]').prop('hidden', true);
-            $('div[ id="titleOption_debate"]').prop('hidden', true);
-        } else if ($(this).val() == 'Agenda') {
-            $('input[ name="indTime"]').prop('disabled', true);
-            $('input[ name="indTime"]').attr("placeholder", "in Seconds");
-            $('input[ name="totalTime"]').prop('disabled', true);
-            $('div[ id="titleTextBox"]').removeAttr('hidden');
-
-            $('div[ id="titleOption"]').prop('hidden', true);
-            $('div[ id="titleOption_paper"]').prop('hidden', true);
-            $('div[ id="titleOption_debate"]').prop('hidden', true);
-        } else if ($(this).val() == 'Voting') {
-            $('div[ id="titleOption"]').removeAttr('hidden');
-            $('div[ id="titleTextBox"]').prop('hidden', true);
-            $('div[ id="titleOption_paper"]').prop('hidden', true);
-            $('div[ id="titleOption_debate"]').prop('hidden', true);
-        } else if ($(this).val() == 'Paper') {
-            $('div[ id="titleOption_paper"]').removeAttr('hidden');
-            $('div[ id="titleOption"]').prop('hidden', true);
-            $('div[ id="titleTextBox"]').prop('hidden', true);
-            $('div[ id="titleOption_debate"]').prop('hidden', true);
-        } else if ($(this).val() == 'Debate') {
-            $('div[ id="titleOption_debate"]').removeAttr('hidden');
-            $('div[ id="titleOption"]').prop('hidden', true);
-            $('div[ id="titleTextBox"]').prop('hidden', true);
-            $('div[ id="titleOption_paper"]').prop('hidden', true);
-        }
+        inputTextFieldHandler("");
     });
 
+    @for (int i = 0; i < Model.Count(); i++)
+     {
+        <text>
+        $('select[name="type_' + @Model[i].Id+ '"]').click(function () {
+            inputTextFieldHandler("_" + @Model[i].Id);
+        });
+
+        $('input[id="' + @Model[i].Id+ '_country"]').keyup(function () {
+            editUIHandler(@Model[i].Id);
+
+        });
+
+        $('input[id="' + @Model[i].Id+ '_title"]').keyup(function () {
+            
+            editUIHandler(@Model[i].Id);
+        });
+
+        $('input[id="' + @Model[i].Id+ '_totalTime"]').keyup(function () {
+           
+            editUIHandler(@Model[i].Id);
+        });
+        </text>
+    }
     $('input[name="indTime"]').blur(function () {
         if ($(this).val() <= 2 && $(this).val() > 0) {
             var value = $('input[ name="indTime"]').val();
