@@ -1,0 +1,150 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>@ViewBag.Title</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Calculator</title>
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <style>
+            body {
+                zoom: 1.25
+            }
+        </style>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+        <script src="~/Scripts/jquery.signalR-2.4.2.min.js"></script>
+        <script src="/signalr/hubs"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    </head>
+
+    <body>
+        <div class="container">
+            <hr>
+            <div class="row">
+                <div class="col-sm-0.5"></div>
+                <div class="target">
+                    <div class="col-12">
+                        @{
+                            Html.RenderAction("RenderMotionList", "View", new { sessionID = @ViewBag.SessionID });
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <script>
+
+            $(document).ready(function () {
+                
+              
+               
+
+            });
+
+            $(function () {
+                var hubNotify = $.connection.SessionHub;
+
+                $.connection.hub.start().done(function () {
+                    //location.reload();
+                });
+
+
+
+                hubNotify.client.refreshSessionPage = function (i) {
+                    if (i == @ViewBag.SessionID) {
+
+                        //getAjax(i);
+                        $('.target').load('/View/RenderMotionList?sessionID=' + i);
+                        console.log("True");
+                    }
+
+                };
+            });
+
+            function getAjax(i) {
+                $.ajax({
+                    url: '/View/GetMotions?data=' + i,
+                    type: 'POST',
+                    dataType: "json",
+                    data: { data: i },
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+
+                        return data;
+                    },
+                    error: function (data) {
+                        alert(data.responseText);
+                    }
+                });
+            }
+            let stepZoom = 1.25;
+
+            function zoomIn() {
+                var currZoomLevel = document.body.style.zoom;
+                if (stepZoom < 2) {
+                    stepZoom += 0.25;
+                    console.log(stepZoom);
+                    document.body.style.zoom = stepZoom;
+                    $('button[ id="zoomOut"]').removeAttr('disabled');
+                    this.blur();
+                } else {
+                    $('button[ id="zoomIn"]').prop('disabled', true);
+                    $('button[ id="zoomOut"]').removeAttr('disabled');
+                }
+
+            }
+            function zoomOut() {
+                var currZoomLevel = document.body.style.zoom;
+                if (stepZoom > 0.25) {
+                    stepZoom -= 0.25;
+                    console.log(stepZoom);
+                    document.body.style.zoom = stepZoom;
+                    $('button[ id="zoomIn"]').removeAttr('disabled');
+                    this.blur();
+                } else {
+                    $('button[ id="zoomOut"]').prop('disabled', true);
+                    $('button[ id="zoomIn"]').removeAttr('disabled');
+                }
+            }
+
+            function fullscreen() {
+                
+                var element = document.head;
+
+                var isFullscreen = document.webkitIsFullScreen || document.mozFullScreen || false;
+
+
+                element.requestFullScreen = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || function () {
+                    return false;
+                };
+                document.cancelFullScreen = document.cancelFullScreen || document.webkitCancelFullScreen || document.mozCancelFullScreen || function () {
+                    return false;
+                };
+
+                isFullscreen ? document.cancelFullScreen() : element.requestFullScreen();
+
+                if (isFullscreen) {
+                    document.getElementById("makeFull").removeAttribute("hidden");
+                    document.getElementById("makeSmall").setAttribute("hidden", true);
+                } else {
+                    document.getElementById("makeSmall").removeAttribute("hidden");
+                    document.getElementById("makeFull").setAttribute("hidden", true);
+                }
+
+
+            }
+        </script>
+</body>
+
+
+</html>

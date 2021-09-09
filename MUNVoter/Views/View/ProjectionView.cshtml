@@ -163,6 +163,7 @@
 
 
                 <script type="text/javascript">
+
                     $(document).ready(function () {
                         fullscreen();
                     });
@@ -179,6 +180,22 @@
                         hubNotify.client.refreshSessionPage = function (i) {
                             if (i == @ViewBag.SessionID) {
                                 location.reload();
+                                
+                                /*
+                                $.ajax({
+                                    url: '/View/GetMotions?data='+i,
+                                    type: 'POST',
+                                    dataType: "json",
+                                    data: { data: i },
+                                    processData: false,
+                                    contentType: false,
+                                    success: function (data) {
+                                        alert(data[0].totalTime);
+                                    },
+                                    error: function (data) {
+                                        alert(data.responseText);
+                                    }
+                                });*/
                                 console.log("True");
                             }
 
@@ -213,7 +230,7 @@
                             $('button[ id="zoomIn"]').removeAttr('disabled');
                         }
                     }
-
+                    
                     function fullscreen() {
                         /*
                         var element = document.head;

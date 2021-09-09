@@ -32,7 +32,7 @@ namespace MUNVoter.Controllers
 
         
 
-        [Route("View/Projection/{sessionID?}")]
+        [Route("View/Projection_old_way_to_do/{sessionID?}")]
         public ActionResult ProjectionView(int sessionID)
         {
             var db = new UnitOfWork(new DatabaseContext());
@@ -52,6 +52,33 @@ namespace MUNVoter.Controllers
             IHubContext context = GlobalHost.ConnectionManager.GetHubContext<SessionHub>();
             
             return View(motions);
+        }
+        [HttpGet]
+        public JsonResult GetMotions(int data)
+        {
+            var db = new UnitOfWork(new DatabaseContext());
+            List<Motion> motions = db.Motions.GetMotionsBySessionId(data).ToList();
+            return Json(motions, JsonRequestBehavior.AllowGet);
+        }
+
+        [Route("View/Projection/{sessionID?}")]
+        public ActionResult ProjectionViewAjax(int sessionID)
+        {
+            ViewBag.SessionID = sessionID;
+            return View();
+        }
+
+        public ActionResult RenderMotionList(int sessionID)
+        {
+            var db = new UnitOfWork(new DatabaseContext());
+            List<Motion> motions = db.Motions.GetMotionsBySessionId(sessionID).ToList();
+
+            ViewBag.motionNumber = db.Motions.GetMotionNumberBySessionId(sessionID);
+            ViewBag.SessionID = sessionID;
+            ViewBag.ConferenceName = db.Sessions.findSessionById(sessionID).ConferenceName;
+            ViewBag.ComitteeName = db.Sessions.findSessionById(sessionID).CommitteeName;
+            ViewBag.countryImg = db.CountryFlags.FindImageAddressesByMotions(motions);
+            return PartialView("_ProjectionMotions", motions);
         }
     }
 }

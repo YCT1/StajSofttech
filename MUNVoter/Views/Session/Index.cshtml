@@ -66,7 +66,7 @@
                         <div class="col-sm-4 pt-1">
                             <div class="input-group">
                                 <button class="btn btn-outline-primary" type="button" id="copyButton_@item.Id" onclick="copyText(@item.Id)"  onfocusout="changeToNormal(@item.Id)">Copy</button>
-                                <input class="form-control" type="text" value="localhost:44312/@item.Id" aria-label="readonly input example" readonly>
+                                <input class="form-control" type="text" value="munvotingapp.azurewebsites.net/@item.Id" aria-label="readonly input example" readonly>
                             </div>
                         </div>
                         </div>
@@ -144,7 +144,7 @@
         });
 
         function copyText(i) {
-            var domain = "localhost:44312";
+            var domain = "munvotingapp.azurewebsites.net";
             /* Copy the text inside the text field */
             navigator.clipboard.writeText(domain + "/" + i);
             var button = document.getElementById("copyButton_" + i);
