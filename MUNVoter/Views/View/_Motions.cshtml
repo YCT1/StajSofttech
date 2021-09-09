@@ -1,0 +1,54 @@
+﻿@if (ViewBag.motionNumber > 0)
+{
+    <h4>Number of Proposed Motion: @ViewBag.motionNumber</h4>
+    <h2>Motions</h2>
+
+    for (int i = 0; i < ViewBag.motionNumber; i++)
+    {
+        {
+            string test = "";
+            if (i == 0)
+            {
+                test = "card border-success mb-2 w-75";
+            }
+            else
+            {
+                test = "card w-75";
+            }
+
+
+            <div class="@test">
+                @if (i == 0)
+                {
+                    <h5 class="card-header" style="color: green;">Voting</h5>
+
+
+                }
+                <div class="card-body">
+                    <h5 class="card-title">@Model[i].type</h5>
+                    <p class="card-text">@Model[i].title</p>
+                    <p class="card-text"><i>by @Model[i].sponsorCountry </i> <img src="@ViewBag.countryImg[i]"></p>
+                    <hr>
+                    @if (Model[i].type == "Extention" || Model[i].type == "Unmoderated")
+                    {
+                        <p class="card-text">Total Time: <b>@Model[i].totalTime min</b></p>
+                    }
+                    else
+                    {
+                        <p class="card-text">Total Time: <b>@Model[i].totalTime min</b>,  Individual Time: <b>@Model[i].indTime seconds</b></p>
+                    }
+                </div>
+            </div>
+            <br>
+        }
+
+
+    }
+
+}
+else
+{
+
+    <h2>There is no motion in the list</h2>
+
+}

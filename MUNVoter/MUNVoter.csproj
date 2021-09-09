@@ -205,6 +205,8 @@
     <Content Include="Views\View\ProjectionView.cshtml" />
     <Content Include="Views\View\ProjectionViewAjax.cshtml" />
     <Content Include="Views\View\_ProjectionMotions.cshtml" />
+    <Content Include="Views\View\Index2.cshtml" />
+    <Content Include="Views\View\_Motions.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

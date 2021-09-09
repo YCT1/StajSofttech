@@ -13,7 +13,7 @@ namespace MUNVoter.Controllers
     public class ViewController : Controller
     {
         // GET: View
-        [Route("View/Index/{sessionID?}")]
+        [Route("View/IndexOLD/{sessionID?}")]
         public ActionResult Index(int sessionID)
         {
             var db = new UnitOfWork(new DatabaseContext());
@@ -30,7 +30,33 @@ namespace MUNVoter.Controllers
             return View(motions);
         }
 
+        [Route("View/Index/{sessionID?}")]
+        public ActionResult Index2(string sessionID)
+        {
+            int sessionIDINT;
+            if (!int.TryParse(sessionID, out sessionIDINT))
+            {
+                return Redirect("/");
+            }
+            ViewBag.SessionID = sessionIDINT;
+            return View();
+        }
         
+        public ActionResult RenderMotionListUser(int sessionID)
+        {
+            var db = new UnitOfWork(new DatabaseContext());
+            List<Motion> motions = db.Motions.GetMotionsBySessionId(sessionID).ToList();
+            if (!db.Sessions.isSessionExsist(sessionID))
+            {
+                return Content("<h2>The session does not exsist</h2>");
+            }
+            ViewBag.motionNumber = db.Motions.GetMotionNumberBySessionId(sessionID);
+            ViewBag.SessionID = sessionID;
+            ViewBag.ConferenceName = db.Sessions.findSessionById(sessionID).ConferenceName;
+            ViewBag.ComitteeName = db.Sessions.findSessionById(sessionID).CommitteeName;
+            ViewBag.countryImg = db.CountryFlags.FindImageAddressesByMotions(motions);
+            return PartialView("_Motions", motions);
+        }
 
         [Route("View/Projection_old_way_to_do/{sessionID?}")]
         public ActionResult ProjectionView(int sessionID)
@@ -62,9 +88,14 @@ namespace MUNVoter.Controllers
         }
 
         [Route("View/Projection/{sessionID?}")]
-        public ActionResult ProjectionViewAjax(int sessionID)
+        public ActionResult ProjectionViewAjax(string sessionID)
         {
-            ViewBag.SessionID = sessionID;
+            int sessionIDINT;
+            if (!int.TryParse(sessionID, out sessionIDINT))
+            {
+                return Redirect("/");
+            }
+            ViewBag.SessionID = sessionIDINT;
             return View();
         }
 
@@ -72,7 +103,10 @@ namespace MUNVoter.Controllers
         {
             var db = new UnitOfWork(new DatabaseContext());
             List<Motion> motions = db.Motions.GetMotionsBySessionId(sessionID).ToList();
-
+            if (!db.Sessions.isSessionExsist(sessionID))
+            {
+                return Content("<h2>The session does not exsist</h2>");
+            }
             ViewBag.motionNumber = db.Motions.GetMotionNumberBySessionId(sessionID);
             ViewBag.SessionID = sessionID;
             ViewBag.ConferenceName = db.Sessions.findSessionById(sessionID).ConferenceName;
