@@ -33,12 +33,15 @@ namespace MUNVoter.Controllers
         [Route("View/Index/{sessionID?}")]
         public ActionResult Index2(string sessionID)
         {
+            var db = new UnitOfWork(new DatabaseContext());
             int sessionIDINT;
             if (!int.TryParse(sessionID, out sessionIDINT))
             {
                 return Redirect("/");
             }
             ViewBag.SessionID = sessionIDINT;
+            ViewBag.ConferenceName = db.Sessions.findSessionById(sessionIDINT).ConferenceName;
+            ViewBag.ComitteeName = db.Sessions.findSessionById(sessionIDINT).CommitteeName;
             return View();
         }
         
@@ -52,8 +55,7 @@ namespace MUNVoter.Controllers
             }
             ViewBag.motionNumber = db.Motions.GetMotionNumberBySessionId(sessionID);
             ViewBag.SessionID = sessionID;
-            ViewBag.ConferenceName = db.Sessions.findSessionById(sessionID).ConferenceName;
-            ViewBag.ComitteeName = db.Sessions.findSessionById(sessionID).CommitteeName;
+           
             ViewBag.countryImg = db.CountryFlags.FindImageAddressesByMotions(motions);
             return PartialView("_Motions", motions);
         }

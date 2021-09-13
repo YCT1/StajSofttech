@@ -29,11 +29,11 @@
                     <p class="card-text">@Model[i].title</p>
                     <p class="card-text"><i>by @Model[i].sponsorCountry </i> <img src="@ViewBag.countryImg[i]"></p>
                     <hr>
-                    @if (Model[i].type == "Extention" || Model[i].type == "Unmoderated")
+                    @if (Model[i].totalTime != null && Model[i].indTime == null)
                     {
                         <p class="card-text">Total Time: <b>@Model[i].totalTime min</b></p>
                     }
-                    else
+                    else if(Model[i].totalTime != null && Model[i].indTime != null)
                     {
                         <p class="card-text">Total Time: <b>@Model[i].totalTime min</b>,  Individual Time: <b>@Model[i].indTime seconds</b></p>
                     }

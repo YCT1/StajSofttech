@@ -66,14 +66,15 @@ namespace MUNVoter.Controllers
             }
 
             //Viewbag Operations
-            ViewBag.motionNumber = db.Motions.GetMotionNumberBySessionId(sessionID);
-            ViewBag.sessionID = sessionID;
-           
             
-            ViewBag.ConferenceName = db.Sessions.findSessionById(sessionID).ConferenceName;
-            ViewBag.ComitteeName = db.Sessions.findSessionById(sessionID).CommitteeName;
+            ViewBag.sessionID = sessionID;
+
+            Session thisSession = db.Sessions.findSessionById(sessionID);
+            ViewBag.ConferenceName = thisSession.ConferenceName;
+            ViewBag.ComitteeName = thisSession.CommitteeName;
 
             List<Motion> motions = db.Motions.GetMotionsBySessionId(sessionID).ToList();
+            ViewBag.motionNumber = motions.Count();
             ViewBag.countryImg = db.CountryFlags.FindImageAddressesByMotions(motions);
             return View(motions);
         }
@@ -111,11 +112,11 @@ namespace MUNVoter.Controllers
             //SessionHub.BroadcastData();
             SessionHub.BroadCastDataSpesfic(sessionID);
 
-            ViewBag.motionNumber = db.Motions.GetMotionNumberBySessionId(sessionID);
-            ViewBag.SessionID = sessionID;
+            //ViewBag.motionNumber = db.Motions.GetMotionNumberBySessionId(sessionID);
+            //ViewBag.SessionID = sessionID;
 
-            ViewBag.ConferenceName = db.Sessions.findSessionById(sessionID).ConferenceName;
-            ViewBag.ComitteeName = db.Sessions.findSessionById(sessionID).CommitteeName;
+            //ViewBag.ConferenceName = db.Sessions.findSessionById(sessionID).ConferenceName;
+            //ViewBag.ComitteeName = db.Sessions.findSessionById(sessionID).CommitteeName;
             //return View(db.Motions.GetMotionsBySessionId(sessionID).ToList());
             return Redirect("/"+ sessionID.ToString());
             
@@ -143,10 +144,10 @@ namespace MUNVoter.Controllers
             //SessionHub.BroadcastData();
             SessionHub.BroadCastDataSpesfic(sessionID);
 
-            ViewBag.motionNumber = db.Motions.GetMotionNumberBySessionId(sessionID);
-            ViewBag.SessionID = sessionID;
-            ViewBag.ConferenceName = db.Sessions.findSessionById(sessionID).ConferenceName;
-            ViewBag.ComitteeName = db.Sessions.findSessionById(sessionID).CommitteeName;
+            //ViewBag.motionNumber = db.Motions.GetMotionNumberBySessionId(sessionID);
+            //ViewBag.SessionID = sessionID;
+            //ViewBag.ConferenceName = db.Sessions.findSessionById(sessionID).ConferenceName;
+            //ViewBag.ComitteeName = db.Sessions.findSessionById(sessionID).CommitteeName;
             //return View("Index", db.Motions.GetMotionsBySessionId(sessionID).ToList());
             return Redirect("/" + sessionID.ToString());
         }
@@ -172,10 +173,10 @@ namespace MUNVoter.Controllers
             //SessionHub.BroadcastData();
             SessionHub.BroadCastDataSpesfic(sessionID);
 
-            ViewBag.motionNumber = db.Motions.GetMotionNumberBySessionId(sessionID);
-            ViewBag.SessionID = sessionID;
-            ViewBag.ConferenceName = db.Sessions.findSessionById(sessionID).ConferenceName;
-            ViewBag.ComitteeName = db.Sessions.findSessionById(sessionID).CommitteeName;
+            //ViewBag.motionNumber = db.Motions.GetMotionNumberBySessionId(sessionID);
+            //ViewBag.SessionID = sessionID;
+            //ViewBag.ConferenceName = db.Sessions.findSessionById(sessionID).ConferenceName;
+            //ViewBag.ComitteeName = db.Sessions.findSessionById(sessionID).CommitteeName;
             //return View("Index",db.Motions.GetMotionsBySessionId(sessionID).ToList());
             return Redirect("/" + sessionID.ToString());
         }

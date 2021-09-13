@@ -75,7 +75,7 @@
         </div>
         <br>
         <input type="submit" name="submit_button" value="Add" id="add_btn" class="btn btn-primary btn-lg" disabled />
-        <a href="@Url.Action("Clear", "Home", new { sessionIDParameter = ViewBag.SessionID })" type="submit" name="submit_button" id="clr_btn" class="btn btn-danger">Clear</a>
+        
         <br>
     }
 </div>
@@ -83,194 +83,211 @@
 <div class="col-sm-7" align="center">
     @if (ViewBag.motionNumber > 0)
     {
-        <h4>Number of Proposed Motion: @ViewBag.motionNumber</h4>
-        <h2>Motions</h2>
+    <div class="row">
+        <div class="col-3">
 
+        </div>
+            <div class="col-6">
+                <h4>Number of Proposed Motion: @ViewBag.motionNumber</h4>
+                <h2>Motions</h2>
+            </div>
+            <div class="col-2">
+                <a href="@Url.Action("Clear", "Home", new { sessionIDParameter = ViewBag.SessionID })" name="submit_button" id="clr_btn" class="btn btn-danger"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+    <path d="M1.293 1.293a1 1 0 0 1 1.414 0L8 6.586l5.293-5.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z" />
+</svg> Clear</a>
+            </div>
+        </div>
         for (int i = 0; i < ViewBag.motionNumber; i++)
         {
+        {
+        string test = "";
+        if (i == 0)
+        {
+        test = "card border-success mb-2 w-75";
+        }
+        else
+        {
+        test = "card w-75";
+        }
+
+
+        <div class="@test">
+            @if (i == 0)
             {
-                string test = "";
-                if (i == 0)
-                {
-                    test = "card border-success mb-2 w-75";
-                }
-                else
-                {
-                    test = "card w-75";
-                }
+                <h5 class="card-header" style="color: green;">Voting</h5>
+                <a href="@Url.Action("Delete", "Home", new { sessionIDParameter = ViewBag.SessionID })" input name="submit_button" id="voted_btn" class="btn btn-success">Voted</a>
 
-
-                <div class="@test">
-                    @if (i == 0)
-                    {
-                        <h5 class="card-header" style="color: green;">Voting</h5>
-                        <a href="@Url.Action("Delete", "Home", new { sessionIDParameter = ViewBag.SessionID })" input name="submit_button" id="voted_btn" class="btn btn-success">Voted</a>
-
-                    }
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-3"></div>
-                            <div class="col-6">
-                                <h5 class="card-title">
-                                    @Model[i].type
-                                </h5>
-                            </div>
-                            <div class="col-3">
-                                <button class="btn btn-success btn-sm float-end" data-bs-toggle="modal" data-bs-target="#test_@Model[i].Id" onClick="editUIHandler(@Model[i].Id)">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
-                                        <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-
-                        <p class="card-text">@Model[i].title</p>
-                        <p class="card-text"><i>by @Model[i].sponsorCountry </i> <img src="@ViewBag.countryImg[i]"></p>
-                        <hr>
-                        @if (Model[i].totalTime != null && Model[i].indTime == null)
-                        {
-                            <p class="card-text">Total Time: <b>@Model[i].totalTime min</b></p>
-                        }
-                        else if (Model[i].totalTime != null && Model[i].indTime != null)
-                        {
-                            <p class="card-text">Total Time: <b>@Model[i].totalTime min</b>,  Individual Time: <b>@Model[i].indTime seconds</b></p>
-                        }
+            }
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-3"></div>
+                    <div class="col-6">
+                        <h5 class="card-title">
+                            @Model[i].type
+                        </h5>
+                    </div>
+                    <div class="col-3">
+                        <button class="btn btn-success btn-sm float-end" data-bs-toggle="modal" data-bs-target="#test_@Model[i].Id" onClick="editUIHandler(@Model[i].Id)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
+                                <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z" />
+                            </svg>
+                        </button>
+                        
+                    <a href="/Home/DeleteMotion/@Model[i].Id?sessionIDParameter=@ViewBag.SessionID" class="btn btn-danger btn-sm float-end me-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                            <path d="M1.293 1.293a1 1 0 0 1 1.414 0L8 6.586l5.293-5.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z" />
+                        </svg>
+                    </a>
                     </div>
                 </div>
-                <br>
-            }
+
+                <p class="card-text">@Model[i].title</p>
+                <p class="card-text"><i>by @Model[i].sponsorCountry </i> <img src="@ViewBag.countryImg[i]"></p>
+                <hr>
+                @if (Model[i].totalTime != null && Model[i].indTime == null)
+                {
+                    <p class="card-text">Total Time: <b>@Model[i].totalTime min</b></p>
+                }
+                else if (Model[i].totalTime != null && Model[i].indTime != null)
+                {
+                    <p class="card-text">Total Time: <b>@Model[i].totalTime min</b>,  Individual Time: <b>@Model[i].indTime seconds</b></p>
+                }
+            </div>
+        </div>
+        <br>
+        }
 
 
-            <div class="modal fade" id="test_@Model[i].Id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Edit Session</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        @using (Html.BeginForm("Edit", "Home", new { sessionIDParameter = ViewBag.SessionID, id= Model[i].Id }, FormMethod.Post))
-                        {
-                    <div class="modal-body">
-
-                        <div class="form-group">
-                            <label for="Operation">Motion Type</label>
-                            <select class="form-control" size="7" name="type" id="type_@Model[i].Id">
-                                @{
-                                    string[] value = new string[7];
-
-                                    if (Model[i].type == "Moderated")
-                                    {
-                                        value[0] = "selected";
-                                    }
-                                    else if (Model[i].type == "Unmoderated")
-                                    {
-                                        value[1] = "selected";
-                                    }
-                                    else if (Model[i].type == "Extention")
-                                    {
-                                        value[2] = "selected";
-                                    }
-                                    else if (Model[i].type == "Agenda")
-                                    {
-                                        value[3] = "selected";
-                                    }
-                                    else if (Model[i].type == "Voting")
-                                    {
-                                        value[4] = "selected";
-                                    }
-                                    else if (Model[i].type == "Debate")
-                                    {
-                                        value[5] = "selected";
-                                    }
-                                    else if (Model[i].type == "Paper")
-                                    {
-                                        value[6] = "selected";
-                                    }
-
-                                    <option value="Moderated" @value[0]>Moderated Caucus</option>
-                                    <option value="Unmoderated" @value[1]>Unmoderated Caucus</option>
-                                    <option value="Extention" @value[2]>Extention</option>
-                                    <option value="Agenda" @value[3]>Set the Agenda</option>
-                                    <option value="Voting" @value[4]>Voting Motions</option>
-                                    <option value="Debate" @value[5]>Debate Motions</option>
-                                    <option value="Paper" @value[6]>Paper Motions</option>
-                                }
-
-                            </select>
-                        </div>
-
-                        <div id="titleOption_@Model[i].Id" class="form-group" hidden>
-                            <label for="Number Two">Motion Title</label>
-                            <select class="form-control" size="3" name="titleVoting">
-                                <option value="Divide the House" selected>Divide the House</option>
-                                <option value="Divide the Question">Divide the Question</option>
-                                <option value="Roll Call Vote">Roll Call Vote</option>
-                            </select>
-                        </div>
-
-                        <div id="titleOption_paper_@Model[i].Id" class="form-group" hidden>
-                            <label for="Number Two">Motion Title</label>
-                            <select class="form-control" size="2" name="titlePaper">
-                                <option value="Introduce a Draft Resolution" selected>Introduce a Draft Resolution</option>
-                                <option value="Introduce an Amendment">Introduce an Amendment</option>
-                            </select>
-                        </div>
-
-                        <div id="titleOption_debate_@Model[i].Id" class="form-group" hidden>
-                            <label for="Number Two">Motion Title</label>
-                            <select class="form-control" size="3" name="titleDebate">
-                                <option value="Close the Debate" selected>Close the Debate</option>
-                                <option value="Postpone the Debate">Postpone the Debate</option>
-                                <option value="Resume the Debate">Resume the Debate</option>
-                            </select>
-                        </div>
-
-                        <div id="titleTextBox_@Model[i].Id" class="form-group">
-                            <label for="Number Two">Motion Title</label>
-                            @Html.TextBox("title", Model[i].title, new { @class = "form-control" , @id="title_" + Model[i].Id})
-                        </div>
-
-                        <div class="form-group">
-                            <label for="Number Two">Country</label>
-                            @Html.TextBox("country", Model[i].sponsorCountry, new { @class = "form-control" , @id =  "country_" + Model[i].Id })
-                        </div>
-                        <div class="form-group">
-                            <label for="Number Two">Total Time</label>
-                            @Html.TextBox("totalTime", Model[i].totalTime, new { @class = "form-control", @type = "number", @step = "0.01", @min = 0, @max = 20, @id =  "totalTime_" + Model[i].Id })
-                        </div>
-
-                        <div class="form-group">
-                            <label for="Number Two">Individual Time</label>
-                            @Html.TextBox("indTime", Model[i].indTime, new { @class = "form-control", @type = "number", @step = "0.01", @id = "indTime_" + Model[i].Id })
-                        </div>
-
-
-
-
-
+        <div class="modal fade" id="test_@Model[i].Id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit Session</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                            <div class="modal-footer">
-                                @Html.ActionLink("Delete", "DeleteMotion", "Home",new { sessionIDParameter = ViewBag.SessionID, id = Model[i].Id }, new { @class="btn btn-danger"})
-                                <button  type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    @using (Html.BeginForm("Edit", "Home", new { sessionIDParameter = ViewBag.SessionID, id = Model[i].Id }, FormMethod.Post))
+                    {
+                        <div class="modal-body">
 
-                                <input value ="Save Changes" id="add_btn_@Model[i].Id" type="submit" class="btn btn-primary"/>
+                            <div class="form-group">
+                                <label for="Operation">Motion Type</label>
+                                <select class="form-control" size="7" name="type" id="type_@Model[i].Id">
+                                    @{
+                                        string[] value = new string[7];
+
+                                        if (Model[i].type == "Moderated")
+                                        {
+                                            value[0] = "selected";
+                                        }
+                                        else if (Model[i].type == "Unmoderated")
+                                        {
+                                            value[1] = "selected";
+                                        }
+                                        else if (Model[i].type == "Extention")
+                                        {
+                                            value[2] = "selected";
+                                        }
+                                        else if (Model[i].type == "Agenda")
+                                        {
+                                            value[3] = "selected";
+                                        }
+                                        else if (Model[i].type == "Voting")
+                                        {
+                                            value[4] = "selected";
+                                        }
+                                        else if (Model[i].type == "Debate")
+                                        {
+                                            value[5] = "selected";
+                                        }
+                                        else if (Model[i].type == "Paper")
+                                        {
+                                            value[6] = "selected";
+                                        }
+
+                                        <option value="Moderated" @value[0]>Moderated Caucus</option>
+                                        <option value="Unmoderated" @value[1]>Unmoderated Caucus</option>
+                                        <option value="Extention" @value[2]>Extention</option>
+                                        <option value="Agenda" @value[3]>Set the Agenda</option>
+                                        <option value="Voting" @value[4]>Voting Motions</option>
+                                        <option value="Debate" @value[5]>Debate Motions</option>
+                                        <option value="Paper" @value[6]>Paper Motions</option>
+                                    }
+
+                                </select>
                             </div>
-                        }
-                    </div>
+
+                            <div id="titleOption_@Model[i].Id" class="form-group" hidden>
+                                <label for="Number Two">Motion Title</label>
+                                <select class="form-control" size="3" name="titleVoting">
+                                    <option value="Divide the House" selected>Divide the House</option>
+                                    <option value="Divide the Question">Divide the Question</option>
+                                    <option value="Roll Call Vote">Roll Call Vote</option>
+                                </select>
+                            </div>
+
+                            <div id="titleOption_paper_@Model[i].Id" class="form-group" hidden>
+                                <label for="Number Two">Motion Title</label>
+                                <select class="form-control" size="2" name="titlePaper">
+                                    <option value="Introduce a Draft Resolution" selected>Introduce a Draft Resolution</option>
+                                    <option value="Introduce an Amendment">Introduce an Amendment</option>
+                                </select>
+                            </div>
+
+                            <div id="titleOption_debate_@Model[i].Id" class="form-group" hidden>
+                                <label for="Number Two">Motion Title</label>
+                                <select class="form-control" size="3" name="titleDebate">
+                                    <option value="Close the Debate" selected>Close the Debate</option>
+                                    <option value="Postpone the Debate">Postpone the Debate</option>
+                                    <option value="Resume the Debate">Resume the Debate</option>
+                                </select>
+                            </div>
+
+                            <div id="titleTextBox_@Model[i].Id" class="form-group">
+                                <label for="Number Two">Motion Title</label>
+                                @Html.TextBox("title", Model[i].title, new { @class = "form-control", @id = "title_" + Model[i].Id })
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Number Two">Country</label>
+                                @Html.TextBox("country", Model[i].sponsorCountry, new { @class = "form-control", @id = "country_" + Model[i].Id })
+                            </div>
+                            <div class="form-group">
+                                <label for="Number Two">Total Time</label>
+                                @Html.TextBox("totalTime", Model[i].totalTime, new { @class = "form-control", @type = "number", @step = "0.01", @min = 0, @max = 20, @id = "totalTime_" + Model[i].Id })
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Number Two">Individual Time</label>
+                                @Html.TextBox("indTime", Model[i].indTime, new { @class = "form-control", @type = "number", @step = "0.01", @id = "indTime_" + Model[i].Id })
+                            </div>
+
+
+
+
+
+                        </div>
+                        <div class="modal-footer">
+                            @Html.ActionLink("Delete", "DeleteMotion", "Home", new { sessionIDParameter = ViewBag.SessionID, id = Model[i].Id }, new { @class = "btn btn-danger" })
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                            <input value="Save Changes" id="add_btn_@Model[i].Id" type="submit" class="btn btn-primary" />
+                        </div>
+                    }
                 </div>
             </div>
+        </div>
 
         }
 
-    }
-    else
-    {
+        }
+        else
+        {
 
         <h2>There is no motion in the list</h2>
 
-    }
+        }
 
-</div>
+    </div>
 
 <script>
 
