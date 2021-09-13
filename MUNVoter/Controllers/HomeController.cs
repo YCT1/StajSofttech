@@ -15,47 +15,26 @@ namespace MUNVoter.Controllers
         
        
         // GET: Home
-        
+        // This function opens the session via url address
+        // It checks wheater session exsist or not
+        // Moreover it shown view only or edit view depending on the user's access to this session
         [Route("{sessionIDParameter?}")]
         [Route("Home/{sessionIDParameter?}")]
         public ActionResult Index(string sessionIDParameter)
         {
-            
             if (string.IsNullOrWhiteSpace(sessionIDParameter) || sessionIDParameter=="Index")
             {
-                //return Content("<h1>This is a Register Page</h1><h2>It is under construction</h2>");
-                
+                // Return to Session Page
                 return Redirect("session/index");
             }
             int sessionID;
             if(!int.TryParse(sessionIDParameter, out sessionID))
             {
+                // Return to Session Page
                 return Redirect("session/index");
             }
-            // Old one
-            /*
-            ViewBag.motionNumber = Database.Motions.Count;
-            DatabaseContext db = new DatabaseContext();
-           
-            return View(Database.Motions);
-            */
-
-            //int sessionID = 0;
+            
             var db = new UnitOfWork(new DatabaseContext());
-            /*
-            List<Motion> _list = new List<Motion>()
-            {
-                new Motion(){title="Discussing Women Rights in Afganistan" , type="Moderated", sponsorCountry="Turkey", totalTime=10, indTime=60,SessionId=0},
-                new Motion(){title="Liberation of South Sudan" , type="Moderated", sponsorCountry="France", totalTime=11, indTime=60,SessionId=0},
-                new Motion(){title="Decline of life expectance" , type="Moderated", sponsorCountry="United Kingdom", totalTime=10, indTime=90,SessionId=1},
-                new Motion(){title="Working on the Draft Resolution" , type="Unmoderated", sponsorCountry="USA", totalTime=10, indTime=0,SessionId=0},
-                new Motion(){title="Prev Motion" , type="Extention", sponsorCountry="Tuvalu", totalTime=5, indTime=60,SessionId=0},
-                new Motion(){title="EU Relation with Taliban" , type="Moderated", sponsorCountry="Bulgaristan", totalTime=10, indTime=60,SessionId=1},
-
-            };*/
-            //db.Motions.AddRange(_list);db.Complete();
-            //CountryFlag test = new CountryFlag() { CountryName = "Turkey", CountryCode = "TR", ImgCode = "TR.jpg" };
-            //db.CountryFlags.Add(test); db.Complete();
 
             if (!db.Sessions.isSessionExsist(sessionID))
             {
@@ -72,7 +51,7 @@ namespace MUNVoter.Controllers
             Session thisSession = db.Sessions.findSessionById(sessionID);
             ViewBag.ConferenceName = thisSession.ConferenceName;
             ViewBag.ComitteeName = thisSession.CommitteeName;
-
+            ViewBag.Title = thisSession.ConferenceName + ", " + thisSession.CommitteeName;
             List<Motion> motions = db.Motions.GetMotionsBySessionId(sessionID).ToList();
             ViewBag.motionNumber = motions.Count();
             ViewBag.countryImg = db.CountryFlags.FindImageAddressesByMotions(motions);
@@ -81,7 +60,7 @@ namespace MUNVoter.Controllers
 
         [HttpPost]
         [Route("{sessionIDParameter?}")]
-        public ActionResult Index(string sessionIDParameter, string title, string type,  string country, float? totalTime, float? indTime, string titleVoting, string titlePaper, string titleDebate) {
+        public ActionResult Index(string sessionIDParameter, string title2, string type,  string country, float? totalTime, float? indTime, string titleVoting, string titlePaper, string titleDebate) {
 
             //string sessionIDParameter = "0";
             int sessionID = int.Parse(sessionIDParameter);
@@ -89,13 +68,13 @@ namespace MUNVoter.Controllers
 
             if(type == "Voting")
             {
-                title = titleVoting;
+                title2 = titleVoting;
             }else if(type == "Paper")
             {
-                title = titlePaper;
+                title2 = titlePaper;
             }else if(type == "Debate")
             {
-                title = titleDebate;
+                title2 = titleDebate;
             }
 
             // Let's check if the user enter country code as two letter
@@ -103,7 +82,7 @@ namespace MUNVoter.Controllers
             {
                 country = db.CountryFlags.FindCountryNameByCode(country);
             }
-            Motion newMotion = new Motion() { title = title, type = type, sponsorCountry = country, totalTime = totalTime, indTime = indTime, SessionId=sessionID };
+            Motion newMotion = new Motion() { title = title2, type = type, sponsorCountry = country, totalTime = totalTime, indTime = indTime, SessionId=sessionID };
             newMotion.calculateOrder();
             db.Motions.Add(newMotion);
             

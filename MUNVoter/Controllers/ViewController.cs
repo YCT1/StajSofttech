@@ -39,9 +39,12 @@ namespace MUNVoter.Controllers
             {
                 return Redirect("/");
             }
+            
             ViewBag.SessionID = sessionIDINT;
-            ViewBag.ConferenceName = db.Sessions.findSessionById(sessionIDINT).ConferenceName;
-            ViewBag.ComitteeName = db.Sessions.findSessionById(sessionIDINT).CommitteeName;
+            Session thisSession = db.Sessions.findSessionById(sessionIDINT);
+            ViewBag.ConferenceName = thisSession.ConferenceName;
+            ViewBag.ComitteeName = thisSession.CommitteeName;
+            ViewBag.Title ="View Only: " + thisSession.ConferenceName + ", " + thisSession.CommitteeName;
             return View();
         }
         
@@ -53,7 +56,7 @@ namespace MUNVoter.Controllers
             {
                 return Content("<h2>The session does not exsist</h2>");
             }
-            ViewBag.motionNumber = db.Motions.GetMotionNumberBySessionId(sessionID);
+            ViewBag.motionNumber = motions.Count();
             ViewBag.SessionID = sessionID;
            
             ViewBag.countryImg = db.CountryFlags.FindImageAddressesByMotions(motions);
@@ -98,21 +101,26 @@ namespace MUNVoter.Controllers
                 return Redirect("/");
             }
             ViewBag.SessionID = sessionIDINT;
+            ViewBag.Title = "Projection View";
             return View();
         }
 
         public ActionResult RenderMotionList(int sessionID)
         {
             var db = new UnitOfWork(new DatabaseContext());
-            List<Motion> motions = db.Motions.GetMotionsBySessionId(sessionID).ToList();
+            
             if (!db.Sessions.isSessionExsist(sessionID))
             {
                 return Content("<h2>The session does not exsist</h2>");
             }
-            ViewBag.motionNumber = db.Motions.GetMotionNumberBySessionId(sessionID);
+
+            List<Motion> motions = db.Motions.GetMotionsBySessionId(sessionID).ToList();
+            ViewBag.motionNumber = motions.Count();
             ViewBag.SessionID = sessionID;
-            ViewBag.ConferenceName = db.Sessions.findSessionById(sessionID).ConferenceName;
-            ViewBag.ComitteeName = db.Sessions.findSessionById(sessionID).CommitteeName;
+
+            Session thisSession = db.Sessions.findSessionById(sessionID);
+            ViewBag.ConferenceName = thisSession.ConferenceName;
+            ViewBag.ComitteeName = thisSession.CommitteeName;
             ViewBag.countryImg = db.CountryFlags.FindImageAddressesByMotions(motions);
             return PartialView("_ProjectionMotions", motions);
         }
